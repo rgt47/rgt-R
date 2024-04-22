@@ -6,14 +6,16 @@ vmap <silent> <C-CR> <C-v>}
 " vnoremap <C-CR> :w temp.R<CR> \| :let @x = "source('temp.R')" \|
 " 		\ :call term_sendkeys(term_list()[0], @x)<CR> \| :+1<CR>}
 vnoremap <F2> :w! temp.R<CR>
-nnoremap <F3> :let @x = "source('temp.R',echo=T)" . "\n"<CR>
-nnoremap <F4> :call term_sendkeys(term_list()[0], @x)<CR>
-nnoremap <F5> :r !R -q --no-echo -e 'options(echo=F); source("temp.R",ec=T)' \| 
-		\ sed 's/^/\# /g'<CR>
-nnoremap <F6> :let @y = "sink('temp2.txt'); 
+" nnoremap <F3> :let @x = "source('temp.R',echo=T)" . "\n"<CR>
+" nnoremap <F4> :call term_sendkeys(term_list()[0], @x)<CR>
+" nnoremap <F5> :r !R -q --no-echo -e 'options(echo=F); source("temp.R",ec=T)' \| 
+" 		\ sed 's/^/\# /g'<CR>
+nnoremap <F6> :let @y = "sink('temp.txt'); 
 \ source('temp.R',echo=T); sink()" . "\n"<CR>
-nnoremap <F7> :call term_sendkeys(term_list()[0], @y)<CR>
-nnoremap <F8> :r !cat temp2.txt \| sed 's/^/\# /g'<CR>
+" nnoremap <F7> :call term_sendkeys(term_list()[0], @y)<CR>
+" nnoremap <F8> :r !cat temp.txt \| sed 's/^/\# /g'<CR>
+nnoremap <F7> :call term_sendkeys(term_list()[0], @y)<CR> \|
+	\ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
 
 
 " control-j to move to next chunk
