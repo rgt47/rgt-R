@@ -1,19 +1,33 @@
-nnoremap <silent> <localleader><CR>  :let @c = getline(".") . "\n" \|
-			\ :call term_sendkeys(term_list()[0], @c)<CR><CR>
-vnoremap  <silent> <localleader>v y \| :let @c=@" . "\n" <CR> \|
-	\ :call term_sendkeys(term_list()[0], @c)<CR>
-vmap <silent> <localleader><CR> <space>v}
-" space-j to move to next chunk
-nnoremap <localleader>j /```{<CR>j
-" space-k to move to prev chunk
+function! SubmitLine()
+:let @c = getline(".") . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
+
+function! SubmitSel()
+	y
+:let @c=@" . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
+
+nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
+vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
+
+function! SelectChunk()
+	:execute "normal! ?```{\<cr>jV/```\<cr>k"
+endfunction
+
+function! MoveNextChunk()
+:execute "normal! /```{\<CR>j/zqzq\<CR>"
+endfunction
+
+noremap <silent> <space>f :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+nnoremap <silent> <space>g :call MoveNextChunk()<CR>
+
+
 nnoremap <localleader>k 2?```{<CR>j
-" C-CR to highlight and run current chunk
-nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j/zqzq<CR>
-" nmap <localleader>l ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
-"
-" space-;' to highlight from cursor to end of chunk
-nnoremap <localleader>; V/```<CR>kC-v>/```{<CR>j/zqzq<CR>
-" space-r to start R
+nnoremap <localleader>j /```{<CR>j
+
+
 nnoremap <silent> <localleader>r :vert term R <CR><c-w>:wincmd p<CR>
 
 nnoremap ZT :!R -e 'render("<C-r>%", output_format="pdf_document")'<CR>
@@ -56,3 +70,19 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 " \ :let @d="names(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
 " nnoremap <silent>  <localleader>l :let @c=expand("<cword>") \|
 " \ :let @d="length(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
+
+" nnoremap <silent> <localleader><CR>  :let @c = getline(".") . "\n" \|
+" 			\ :call term_sendkeys(term_list()[0], @c)<CR><CR>
+" vnoremap  <silent> <localleader>v y \| :let @c=@" . "\n" <CR> \|
+" 	\ :call term_sendkeys(term_list()[0], @c)<CR>
+" vmap <silent> <localleader><CR> <space>v}
+" space-j to move to next chunk
+" space-k to move to prev chunk
+" C-CR to highlight and run current chunk
+" nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j/zqzq<CR>
+" nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j
+" nmap <localleader>l ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
+"
+" space-;' to highlight from cursor to end of chunk
+" nnoremap <localleader>; V/```<CR>kC-v>/```{<CR>j/zqzq<CR>
+" space-r to start R
