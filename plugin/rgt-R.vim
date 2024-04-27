@@ -7,12 +7,12 @@ vmap <silent> <localleader><CR> <space>v}
 nnoremap <localleader>j /```{<CR>j
 " space-k to move to prev chunk
 nnoremap <localleader>k 2?```{<CR>j
-" space-' to highlight and run current chunk
-nmap <localleader>' ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
+" C-CR to highlight and run current chunk
+nmap <C-CR> ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
 " nmap <localleader>l ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
 "
 " space-;' to highlight from cursor to end of chunk
-nnoremap <localleader>; V/```<CR>k
+nnoremap <localleader>; V/```<CR>kC-v>/```{<CR>j/zqzq<CR>
 " space-r to start R
 nnoremap <silent> <localleader>r :vert term R <CR><c-w>:wincmd p<CR>
 
