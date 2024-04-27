@@ -8,7 +8,7 @@ nnoremap <localleader>j /```{<CR>j
 " space-k to move to prev chunk
 nnoremap <localleader>k 2?```{<CR>j
 " C-CR to highlight and run current chunk
-nmap <C-CR> ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
+nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j/zqzq<CR>
 " nmap <localleader>l ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
 "
 " space-;' to highlight from cursor to end of chunk
