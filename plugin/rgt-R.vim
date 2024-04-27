@@ -1,3 +1,7 @@
+" :execute "normal! ...": run the sequence of commands as if they were entered
+" in normal mode, ignoring all mappings, and replacing string escape sequences
+" with their results.
+
 function! SubmitLine()
 :let @c = getline(".") . "\n"
 :call term_sendkeys(term_list()[0], @c)
@@ -17,11 +21,13 @@ function! SelectChunk()
 endfunction
 
 function! MoveNextChunk()
-:execute "normal! /```{\<CR>j/zqzq\<CR>"
+:execute "normal! /```{\<CR>j"
+:noh
 endfunction
 
-noremap <silent> <space>f :call SelectChunk()<CR> \| :call SubmitSel()<CR>
-nnoremap <silent> <space>g :call MoveNextChunk()<CR>
+" noremap <silent> <space>f :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 
 
 nnoremap <localleader>k 2?```{<CR>j
@@ -58,6 +64,10 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
+
+
+
+"backup code
 " nnoremap <silent>  <localleader>d :let @c=expand("<cword>") \|
 " \ :let @d="dim(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
 " nnoremap <silent>  <localleader>h :let @c=expand("<cword>") \|
