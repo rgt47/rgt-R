@@ -1,14 +1,10 @@
-" :execute "normal! ...": run the sequence of commands as if they were entered
-" in normal mode, ignoring all mappings, and replacing string escape sequences
-" with their results.
-
 function! SubmitLine()
 :let @c = getline(".") . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
 function! SubmitSel()
-	y
+:yank	
 :let @c=@" . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
@@ -25,17 +21,13 @@ function! MoveNextChunk()
 :noh
 endfunction
 
-" noremap <silent> <space>f :call SelectChunk()<CR> \| :call SubmitSel()<CR>
 noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
-
 
 nnoremap <localleader>k 2?```{<CR>j
 nnoremap <localleader>j /```{<CR>j
 
-
 nnoremap <silent> <localleader>r :vert term R <CR><c-w>:wincmd p<CR>
-
 nnoremap ZT :!R -e 'render("<C-r>%", output_format="pdf_document")'<CR>
 
 tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
@@ -44,7 +36,6 @@ tnoremap ZR render("<C-W>"%")<CR>
 tnoremap ZS style_dir()<CR>
 tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
 tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
-" quick list of files for debug: lf
 tnoremap lf ls()<CR>
 
 function! Raction(action)
@@ -64,35 +55,3 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
-
-
-
-"backup code
-" nnoremap <silent>  <localleader>d :let @c=expand("<cword>") \|
-" \ :let @d="dim(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-" nnoremap <silent>  <localleader>h :let @c=expand("<cword>") \|
-" \ :let @d="head(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-" nnoremap <silent>  <localleader>s :let @c=expand("<cword>") \|
-" \ :let @d="str(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-" nnoremap <silent>  <localleader>p :let @c=expand("<cword>") \|
-" \ :let @d="print(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-" nnoremap <silent>  <localleader>n :let @c=expand("<cword>") \|
-" \ :let @d="names(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-" nnoremap <silent>  <localleader>l :let @c=expand("<cword>") \|
-" \ :let @d="length(".@c.")"."\n"   \| :call term_sendkeys(term_list()[0], @d)<CR>
-
-" nnoremap <silent> <localleader><CR>  :let @c = getline(".") . "\n" \|
-" 			\ :call term_sendkeys(term_list()[0], @c)<CR><CR>
-" vnoremap  <silent> <localleader>v y \| :let @c=@" . "\n" <CR> \|
-" 	\ :call term_sendkeys(term_list()[0], @c)<CR>
-" vmap <silent> <localleader><CR> <space>v}
-" space-j to move to next chunk
-" space-k to move to prev chunk
-" C-CR to highlight and run current chunk
-" nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j/zqzq<CR>
-" nmap <localleader>' ?```{<CR>jV/```<CR>k<space>v/```{<CR>j
-" nmap <localleader>l ?```{<CR>jV/```<CR>k<C-v>/```{<CR>j/zqzq<CR>
-"
-" space-;' to highlight from cursor to end of chunk
-" nnoremap <localleader>; V/```<CR>kC-v>/```{<CR>j/zqzq<CR>
-" space-r to start R
