@@ -6,7 +6,7 @@ a = 1:10
 bb = 1:5
 # 
 # > bb = 1:5
-
+aa = c(a, bb)
 cc = duplicated(aa)
 cc
 
