@@ -4,8 +4,8 @@ function! SubmitLine()
 endfunction
 
 function! SubmitSel()
-y
-:let @c=@" . "\n"
+normal! "ay
+:let @c=@a . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
