@@ -1,13 +1,50 @@
+" vim - How to get visually selected text in VimScript - Stack Overflow
+" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+"
+function! GetVisualSelection(mode)
+    " call with visualmode() as the argument
+    let [line_start, column_start] = getpos("'<")[1:2]
+    let [line_end, column_end]     = getpos("'>")[1:2]
+    let lines = getline(line_start, line_end)
+    if a:mode ==# 'v'
+        " Must trim the end before the start, the beginning will shift left.
+        let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
+        let lines[0] = lines[0][column_start - 1:]
+    elseif  a:mode ==# 'V'
+        " Line mode no need to trim start or end
+    elseif  a:mode == "\<c-v>"
+        " Block mode, trim every line
+        let new_lines = []
+        let i = 0
+        for line in lines
+            let lines[i] = line[column_start - 1: column_end - (&selection == 'inclusive' ? 1 : 2)]
+            let i = i + 1
+        endfor
+    else
+        return ''
+    endif
+    for line in lines
+        echom line
+    endfor
+    return join(lines, "\n")
+endfunction
+
+
+
 function! SubmitLine()
 :let @c = getline(".") . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
 function! SubmitSel()
-y
-:let @c=@* . "\n"
+:let @c= GetVisualSelection(visualmode()) . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
+" function! SubmitSel()
+" y
+" :let @c=@* . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
 
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
@@ -21,7 +58,9 @@ function! MoveNextChunk()
 :noh
 endfunction
 
-noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+" noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+" consider <localleader>L for submitting all previous chunks
+noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 
 nnoremap <localleader>k 2?```{<CR>j
@@ -49,7 +88,7 @@ nnoremap <localleader>h :call Raction("head")<CR>
 nnoremap <localleader>s :call Raction("str")<CR>
 nnoremap <localleader>p :call Raction("print")<CR>
 nnoremap <localleader>n :call Raction("names")<CR>
-nnoremap <localleader>l :call Raction("length")<CR>
+nnoremap <localleader>f :call Raction("length")<CR>
 
 vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
