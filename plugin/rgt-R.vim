@@ -36,6 +36,12 @@ function! SubmitLine()
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
+function! SubmitSel0()
+y
+:let @c=@" . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
+
 function! SubmitSel()
 :let @c= GetVisualSelection(visualmode()) . "\n"
 :call term_sendkeys(term_list()[0], @c)
@@ -48,6 +54,7 @@ endfunction
 
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
+vnoremap <silent> <S-CR> :call SubmitSel0()<CR><CR>
 
 function! SelectChunk()
 	:execute "normal! ?```{\<cr>jV/```\<cr>k"
@@ -101,9 +108,17 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 ":let @c= GetVisualSelection(visualmode()) . "\n"
 " source(pipe("pbpaste"))
 
-function! SubmitSel2()
-:let @y = "source(pipe("pbpaste"))" . "\n"
+function! SubSel2()
+:let @*= GetVisualSelection(visualmode()) . "\n"
+:let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
+vnoremap  <space>e :call SubSel2()<CR><CR>
+
+function! SubSel3()
+:let @c= GetVisualSelection(visualmode()) . "\n"
+:call writefile(getreg('c', 1, 1), "temp.R")
+:let @y = "source('temp.R',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], @y)
 endfunction
-
-vnoremap <silent> <localleader>x :call SubmitSel2()<CR><CR>
+vnoremap  <space>c :call SubSel3()<CR><CR>

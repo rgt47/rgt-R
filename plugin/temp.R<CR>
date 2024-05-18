@@ -5,9 +5,12 @@
 rm(list = ls())
 lbrary(svMisc)
 a=1:10
-bb = 1:5
+b = 1:5
 aa= c(a, bb)
 c = duplicated(a)
+a=            1:10
+bb = 1:5
+a=  c(a, bb)
 cc = duplicated(aa)
 a = 1:10
 bb = 1:5
