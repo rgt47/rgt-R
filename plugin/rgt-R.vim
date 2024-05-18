@@ -94,3 +94,16 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
+
+" idea read visual selection into clipboard. source clipboard.
+" might work better than pushing text directly to terminal prompt
+" vnoremap <silent> <localleader>z :w! temp.R<CR> \|
+":let @c= GetVisualSelection(visualmode()) . "\n"
+" source(pipe("pbpaste"))
+
+function! SubmitSel2()
+:let @y = "source(pipe("pbpaste"))" . "\n"
+:call term_sendkeys(term_list()[0], @y)
+endfunction
+
+vnoremap <silent> <localleader>x :call SubmitSel2()<CR><CR>

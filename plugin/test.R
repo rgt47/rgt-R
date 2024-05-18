@@ -2,22 +2,37 @@
 2
 3
 ```{r }
+rm(list = ls())
+library(svMisc)
 a = 1:10
 bb = 1:5
-# 
-# > bb = 1:5
 aa =  c(a, bb)
 cc = duplicated(aa)
- cc
+a=1:10
+bb = 1:5
+aa =  c(a, bb)
+cc = duplicated(aa)
+a = 1:10
+bb = 1:5
+aa =  c(a, bb)
+cc = duplicated(aa)
+cc
+
+
+
+
+# 
+# > cc
+#  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+# [13]  TRUE  TRUE  TRUE
+
+
 
 ```
 # 
 # > cc
-#  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-# 
-# > cc
-#  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
-
+#  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE
+# [13]  TRUE  TRUE  TRUE
 
 ```{r } 
 bb
