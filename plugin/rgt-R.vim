@@ -42,15 +42,15 @@ y
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
-function! SubmitSel()
-:let @c= GetVisualSelection(visualmode()) . "\n"
-:call term_sendkeys(term_list()[0], @c)
-endfunction
 " function! SubmitSel()
-" y
-" :let @c=@* . "\n"
+" :let @c= GetVisualSelection(visualmode()) . "\n"
 " :call term_sendkeys(term_list()[0], @c)
 " endfunction
+function! SubmitSel()
+y
+:let @c=@* . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
 
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
