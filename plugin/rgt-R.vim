@@ -83,7 +83,7 @@ nnoremap <localleader>k 2?```{<CR>j
 nnoremap <localleader>j /```{<CR>j
 
 nnoremap <silent> <localleader>r :vert term R <CR><c-w>:wincmd p<CR>
-nnoremap ZT :!R -e 'render("<C-r>%", output_format="pdf_document")'<CR>
+nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
 
 tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
 tnoremap ZO source("<C-W>"%")
