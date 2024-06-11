@@ -1,1 +1,2 @@
-duplicated(aa)
+cc = c(aa,bb)
+duplicated(cc)

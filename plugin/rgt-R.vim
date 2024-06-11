@@ -52,8 +52,17 @@ y
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
+function! SubSel3()
+:let @c= GetVisualSelection(visualmode()) . "\n"
+:call writefile(getreg('c', 1, 1), "temp.R")
+:let @y = "source('temp.R',echo=T)" . "\n"
+:call term_sendkeys(term_list()[0], @y)
+endfunction
+
+vnoremap  <space>c :call SubSel3()<CR><CR>
+
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
+vnoremap <silent> <CR> :call SubmitSel3()<CR><CR>
 vnoremap <silent> <S-CR> :call SubmitSel0()<CR><CR>
 
 function! SelectChunk()
