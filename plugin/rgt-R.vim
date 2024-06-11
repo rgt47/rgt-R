@@ -52,7 +52,7 @@ y
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
-function! SubSel3()
+function! SubmitSel3()
 :let @c= GetVisualSelection(visualmode()) . "\n"
 :call writefile(getreg('c', 1, 1), "temp.R")
 :let @y = "source('temp.R',echo=T)" . "\n"
