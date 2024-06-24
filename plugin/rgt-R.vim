@@ -82,7 +82,7 @@ nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 nnoremap <localleader>k 2?```{<CR>j
 nnoremap <localleader>j /```{<CR>j
 
-nnoremap <silent> <localleader>r :vert term R  --quiet --no-save<CR><c-w>:wincmd p<CR>
+nnoremap <silent> <localleader>r :vert term R --quiet --no-save<CR><c-w>:wincmd p<CR>
 nnoremap ZT :!R --quiet -e 'render("<C-r>%", quiet=T, output_format="pdf_document")'<CR>
 nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", quiet=T, output_format="pdf")'<CR>
 
