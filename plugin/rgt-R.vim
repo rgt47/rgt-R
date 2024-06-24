@@ -1,6 +1,28 @@
 " vim - How to get visually selected text in VimScript - Stack Overflow
 " https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
 "
+
+function! SelectChunk()
+	:execute "normal! ?```{\<cr>jV/```\<cr>k"
+endfunction
+
+function! MoveNextChunk()
+:execute "normal! /```{\<CR>j"
+:noh
+endfunction
+
+function! Raction(action)
+:let @c = expand("<cword>")
+:let @d=a:action . "(".@c.")\n"
+:call term_sendkeys(term_list()[0], @d)
+endfunction
+
+
+function! SubmitLine()
+:let @c = getline(".") . "\n"
+:call term_sendkeys(term_list()[0], @c)
+endfunction
+
 function! GetVisualSelection(mode)
     " call with visualmode() as the argument
     let [line_start, column_start] = getpos("'<")[1:2]
@@ -30,61 +52,35 @@ function! GetVisualSelection(mode)
 endfunction
 
 
-
-function! SubmitLine()
-:let @c = getline(".") . "\n"
-:call term_sendkeys(term_list()[0], @c)
-endfunction
-
-function! SubmitSel0()
+function! SubmitSelTest()
 y
 :let @c=@" . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
-" function! SubmitSel()
-" :let @c= GetVisualSelection(visualmode()) . "\n"
-" :call term_sendkeys(term_list()[0], @c)
-" endfunction
-function! SubmitSel()
-y
-:let @c=@* . "\n"
-:call term_sendkeys(term_list()[0], @c)
-endfunction
 
-function! SubmitSel3()
+function! SubmitSel()
 :let @c= GetVisualSelection(visualmode()) . "\n"
 :call writefile(getreg('c', 1, 1), "temp.R")
 :let @y = "source('temp.R',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], @y)
 endfunction
 
-vnoremap  <space>c :call SubSel3()<CR><CR>
 
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-vnoremap <silent> <CR> :call SubmitSel3()<CR><CR>
-vnoremap <silent> <S-CR> :call SubmitSel0()<CR><CR>
+vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
+vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
 
-function! SelectChunk()
-	:execute "normal! ?```{\<cr>jV/```\<cr>k"
-endfunction
-
-function! MoveNextChunk()
-:execute "normal! /```{\<CR>j"
-:noh
-endfunction
-
-" noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
-" consider <localleader>L for submitting all previous chunks
-noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSelTest()<CR>
+noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSelTest()<CR> \| /```{<CR>j
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 
 nnoremap <localleader>k 2?```{<CR>j
 nnoremap <localleader>j /```{<CR>j
 
-nnoremap <silent> <localleader>r :vert term R --quiet --no-save<CR><c-w>:wincmd p<CR>
-nnoremap ZT :!R --quiet -e 'render("<C-r>%", quiet=T, output_format="pdf_document")'<CR>
-nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", quiet=T, output_format="pdf")'<CR>
+nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
+nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", output_format="pdf")'<CR>
 
 tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
 tnoremap ZO source("<C-W>"%")
@@ -94,23 +90,19 @@ tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
 tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
 tnoremap lf ls()<CR>
 
-function! Raction(action)
-:let @c = expand("<cword>")
-:let @d=a:action . "(".@c.")\n"
-:call term_sendkeys(term_list()[0], @d)
-endfunction
-
 nnoremap <localleader>d :call Raction("dim")<CR>
 nnoremap <localleader>h :call Raction("head")<CR>
 nnoremap <localleader>s :call Raction("str")<CR>
 nnoremap <localleader>p :call Raction("print")<CR>
 nnoremap <localleader>n :call Raction("names")<CR>
 nnoremap <localleader>f :call Raction("length")<CR>
-
 vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
+
+" noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+" consider <localleader>L for submitting all previous chunks
 
 " idea read visual selection into clipboard. source clipboard.
 " might work better than pushing text directly to terminal prompt
@@ -118,17 +110,29 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 ":let @c= GetVisualSelection(visualmode()) . "\n"
 " source(pipe("pbpaste"))
 
-function! SubSel2()
-:let @*= GetVisualSelection(visualmode()) . "\n"
-:let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
-:call term_sendkeys(term_list()[0], @c)
-endfunction
-vnoremap  <space>e :call SubSel2()<CR><CR>
+" function! SubmitSel()
+" :let @c= GetVisualSelection(visualmode()) . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
+" function! SubmitSel()
+" y
+" :let @c=@* . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
+" function! SubSel2()
+" :let @*= GetVisualSelection(visualmode()) . "\n"
+" :let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
 
-function! SubSel3()
-:let @c= GetVisualSelection(visualmode()) . "\n"
-:call writefile(getreg('c', 1, 1), "temp.R")
-:let @y = "source('temp.R',echo=T)" . "\n"
-:call term_sendkeys(term_list()[0], @y)
-endfunction
-vnoremap  <space>c :call SubSel3()<CR><CR>
+" function! SubSel3()
+" :let @c= GetVisualSelection(visualmode()) . "\n"
+" :call writefile(getreg('c', 1, 1), "temp.R")
+" :let @y = "source('temp.R',echo=T)" . "\n"
+" :call term_sendkeys(term_list()[0], @y)
+" endfunction
+
+" vnoremap  <space>c :call SubSel3()<CR><CR>
+" vnoremap  <space>c :call SubSel3()<CR><CR>
+" vnoremap  <space>e :call SubSel2()<CR><CR>
+
