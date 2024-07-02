@@ -1,0 +1,35 @@
+
+" noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+" consider <localleader>L for submitting all previous chunks
+
+" idea read visual selection into clipboard. source clipboard.
+" might work better than pushing text directly to terminal prompt
+" vnoremap <silent> <localleader>z :w! temp.R<CR> \|
+":let @c= GetVisualSelection(visualmode()) . "\n"
+" source(pipe("pbpaste"))
+
+" function! SubmitSel()
+" :let @c= GetVisualSelection(visualmode()) . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
+" function! SubmitSel()
+" y
+" :let @c=@* . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
+" function! SubSel2()
+" :let @*= GetVisualSelection(visualmode()) . "\n"
+" :let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
+" :call term_sendkeys(term_list()[0], @c)
+" endfunction
+
+" function! SubSel3()
+" :let @c= GetVisualSelection(visualmode()) . "\n"
+" :call writefile(getreg('c', 1, 1), "temp.R")
+" :let @y = "source('temp.R',echo=T)" . "\n"
+" :call term_sendkeys(term_list()[0], @y)
+" endfunction
+
+" vnoremap  <space>c :call SubSel3()<CR><CR>
+" vnoremap  <space>c :call SubSel3()<CR><CR>
+" vnoremap  <space>e :call SubSel2()<CR><CR>

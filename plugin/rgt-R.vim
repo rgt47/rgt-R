@@ -11,6 +11,13 @@ function! MoveNextChunk()
 :noh
 endfunction
 
+
+
+function! MovePrevChunk()
+:execute "normal! 2?```{<CR>j"
+:noh
+endfunction
+
 function! Raction(action)
 :let @c = expand("<cword>")
 :let @d=a:action . "(".@c.")\n"
@@ -22,7 +29,9 @@ function! SubmitLine()
 :let @c = getline(".") . "\n"
 :call term_sendkeys(term_list()[0], @c)
 endfunction
-
+"
+" 2024-07-02
+"try to streamline the following code to drop the Control-v options.
 function! GetVisualSelection(mode)
     " call with visualmode() as the argument
     let [line_start, column_start] = getpos("'<")[1:2]
@@ -70,13 +79,16 @@ endfunction
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
 vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
-
-noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSelTest()<CR>
+"test to sry to restrict <space>l to only rmd files to not conflict with victex
+autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSelTest()<CR>
 noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSelTest()<CR> \| /```{<CR>j
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 
-nnoremap <localleader>k 2?```{<CR>j
-nnoremap <localleader>j /```{<CR>j
+nnoremap <localleader>k :call MovePrevChunk()<CR>
+
+" nnoremap <localleader>k 2?```{<CR>j
+nnoremap <localleader>j :call MoveNextChunk()<CR>
+" nnoremap <localleader>j /```{<CR>j
 
 nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
 nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
@@ -100,39 +112,3 @@ vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
-
-" noremap <silent> <S-CR> :call SelectChunk()<CR> \| :call SubmitSel()<CR>
-" consider <localleader>L for submitting all previous chunks
-
-" idea read visual selection into clipboard. source clipboard.
-" might work better than pushing text directly to terminal prompt
-" vnoremap <silent> <localleader>z :w! temp.R<CR> \|
-":let @c= GetVisualSelection(visualmode()) . "\n"
-" source(pipe("pbpaste"))
-
-" function! SubmitSel()
-" :let @c= GetVisualSelection(visualmode()) . "\n"
-" :call term_sendkeys(term_list()[0], @c)
-" endfunction
-" function! SubmitSel()
-" y
-" :let @c=@* . "\n"
-" :call term_sendkeys(term_list()[0], @c)
-" endfunction
-" function! SubSel2()
-" :let @*= GetVisualSelection(visualmode()) . "\n"
-" :let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
-" :call term_sendkeys(term_list()[0], @c)
-" endfunction
-
-" function! SubSel3()
-" :let @c= GetVisualSelection(visualmode()) . "\n"
-" :call writefile(getreg('c', 1, 1), "temp.R")
-" :let @y = "source('temp.R',echo=T)" . "\n"
-" :call term_sendkeys(term_list()[0], @y)
-" endfunction
-
-" vnoremap  <space>c :call SubSel3()<CR><CR>
-" vnoremap  <space>c :call SubSel3()<CR><CR>
-" vnoremap  <space>e :call SubSel2()<CR><CR>
-
