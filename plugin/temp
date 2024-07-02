@@ -1,6 +1,0 @@
-:let @*= GetVisualSelection(visualmode()) . "\n"
-:let @c = 'source(pipe("pbpaste"), echo=TRUE)' . "\n"
-cc = duplicated(aa)
-a = 1:10
-bb = 1:5
-
