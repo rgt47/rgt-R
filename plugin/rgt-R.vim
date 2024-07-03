@@ -84,9 +84,9 @@ autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| 
 noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSelTest()<CR> \| /```{<CR>j
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
 
-nnoremap <localleader>k :call MovePrevChunk()<CR>
+" nnoremap <localleader>k :call MovePrevChunk()<CR>
 
-" nnoremap <localleader>k 2?```{<CR>j
+nnoremap <localleader>k 2?```{<CR>j
 nnoremap <localleader>j :call MoveNextChunk()<CR>
 " nnoremap <localleader>j /```{<CR>j
 
