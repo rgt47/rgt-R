@@ -77,9 +77,9 @@ endfunction
 
 
 nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
-vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
-"test to sry to restrict <space>l to only rmd files to not conflict with victex
+vnoremap <silent> <CR> :call SubmitSelTest()<CR><CR>
+vnoremap <silent> <S-CR> :call SubmitSel()<CR><CR>
+"test to try to restrict <space>l to only rmd files to not conflict with victex
 autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSelTest()<CR>
 noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSelTest()<CR> \| /```{<CR>j
 nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
