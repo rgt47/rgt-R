@@ -1,23 +1,11 @@
-" oct 2, 2024
-" two problems to work out: 
-" 1) visual selection of part of a line is grabbing the whole line. 
-" 2) theres a limit on haw much text can be fed to the R> prompt. Would it work
-" to take the visual selection and wrap it in a "source" command and send the
-" source command to the R> prompt? 
-" vim - How to get visually selected text in VimScript - Stack Overflow
-" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
-"
-
 function! SelectChunk()
 	:execute "normal! ?```{\<cr>jV/```\<cr>k"
 endfunction
 
 function! MoveNextChunk()
-:execute "normal! /```{\<CR>j"
+:execute "normal! 2?```{<CR>j"
 :noh
 endfunction
-
-
 
 function! MovePrevChunk()
 :execute "normal! 2?```{<CR>j"
@@ -30,15 +18,11 @@ function! Raction(action)
 :call term_sendkeys(term_list()[0], @d)
 endfunction
 
-
 function! SubmitLine()
 :let @c = getline(".") . "\n"
-" :echom "test print value of c register " . @c
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 "
-" 2024-07-02
-"try to streamline the following code to drop the Control-v options.
 function! GetVisualSelection(mode)
 " call with visualmode() as the argument
 let [line_start, column_start] = getpos("'<")[1:2]
@@ -52,9 +36,6 @@ elseif  a:mode ==# 'V'
 else
 return ''
 endif
-" for line in lines
-" echom line
-" endfor
 return join(lines, "\n")
 endfunction
 
@@ -68,46 +49,46 @@ endfunction
 
 function! SubmitSel()
 :let @c= GetVisualSelection(visualmode()) . "\n"
-" :echom "test print value of c register " . @c
 :call writefile(getreg('c', 1, 1), "source_visual")
 :let @y = "source('source_visual',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], @y)
 endfunction
 
-
-nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
-vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
-"test to try to restrict <space>l to only rmd files to not conflict with victex
-autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSelTest()<CR>
-noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSelTest()<CR> \| /```{<CR>j
-nnoremap <silent> <C-CR> :call MoveNextChunk()<CR>
-
-" nnoremap <localleader>k :call MovePrevChunk()<CR>
-
-nnoremap <localleader>k 2?```{<CR>j
-nnoremap <localleader>j :call MoveNextChunk()<CR>
-" nnoremap <localleader>j /```{<CR>j
-
-nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
-nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
-nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", output_format="pdf")'<CR>
-
-tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
-tnoremap ZO source("<C-W>"%")
-tnoremap ZR render("<C-W>"%")<CR>
-tnoremap ZS style_dir()<CR>
-tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
-tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
-tnoremap lf ls()<CR>
-
-nnoremap <localleader>d :call Raction("dim")<CR>
-nnoremap <localleader>h :call Raction("head")<CR>
-nnoremap <localleader>s :call Raction("str")<CR>
-nnoremap <localleader>p :call Raction("print")<CR>
-nnoremap <localleader>n :call Raction("names")<CR>
-nnoremap <localleader>f :call Raction("length")<CR>
-vnoremap <silent> <localleader>z :w! temp.R<CR> \|
+augroup r_rmd_qmd
+    autocmd!
+autocmd FileType r,rmd,qmd autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f Vatzf
+autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
+autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
+autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
+autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
+"test to try to restrict <space>l to only rmd files to not conflict with victex
+autocmd FileType r,rmd,qmd autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+autocmd FileType r,rmd,qmd noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSel()<CR> \| /```{<CR>j
+
+autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
+
+autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
+" nnoremap <localleader>j /```{<CR>j
+
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
+autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", output_format="pdf")'<CR>
+
+autocmd FileType r,rmd,qmd tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
+autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
+autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
+autocmd FileType r,rmd,qmd tnoremap ZS style_dir()<CR>
+autocmd FileType r,rmd,qmd tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
+autocmd FileType r,rmd,qmd tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
+autocmd FileType r,rmd,qmd tnoremap lf ls()<CR>
+
+autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
+augroup END
