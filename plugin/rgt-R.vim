@@ -3,12 +3,12 @@ function! SelectChunk()
 endfunction
 
 function! MoveNextChunk()
-:execute "normal! 2?```{<CR>j"
+:execute "normal! /```{\<CR>j"
 :noh
 endfunction
 
 function! MovePrevChunk()
-:execute "normal! 2?```{<CR>j"
+:execute "normal! 2?```{\<CR>j"
 :noh
 endfunction
 
