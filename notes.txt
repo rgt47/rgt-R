@@ -1,0 +1,12 @@
+" oct 2, 2024
+" two problems to work out: 
+" 1) visual selection of part of a line is grabbing the whole line. 
+" 2) theres a limit on haw much text can be fed to the R> prompt. Would it work
+" to take the visual selection and wrap it in a "source" command and send the
+" source command to the R> prompt? 
+" vim - How to get visually selected text in VimScript - Stack Overflow
+" https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+"
+Oct 22, 2024
+revised and reorganized the functions and maps
+

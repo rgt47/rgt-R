@@ -56,7 +56,7 @@ endfunction
 
 augroup r_rmd_qmd
     autocmd!
-autocmd FileType r,rmd,qmd autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f Vatzf
+autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f Vatzf
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
 autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
@@ -65,18 +65,13 @@ autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
 "test to try to restrict <space>l to only rmd files to not conflict with victex
-autocmd FileType r,rmd,qmd autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
+autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
 autocmd FileType r,rmd,qmd noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSel()<CR> \| /```{<CR>j
-
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
-
 autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
-" nnoremap <localleader>j /```{<CR>j
-
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
 autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
 autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", output_format="pdf")'<CR>
-
 autocmd FileType r,rmd,qmd tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
 autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
 autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
@@ -84,7 +79,6 @@ autocmd FileType r,rmd,qmd tnoremap ZS style_dir()<CR>
 autocmd FileType r,rmd,qmd tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
 autocmd FileType r,rmd,qmd tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
 autocmd FileType r,rmd,qmd tnoremap lf ls()<CR>
-
 autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
