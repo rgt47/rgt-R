@@ -33,6 +33,7 @@ endfunction
 
 function! SubmitLine()
 :let @c = getline(".") . "\n"
+" :echom "test print value of c register " . @c
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 "
@@ -43,7 +44,6 @@ function! GetVisualSelection(mode)
 let [line_start, column_start] = getpos("'<")[1:2]
 let [line_end, column_end]     = getpos("'>")[1:2]
 let lines = getline(line_start, line_end)
-echom lines
 if a:mode ==# 'v'
 " Must trim the end before the start, the beginning will shift left.
 let lines[-1] = lines[-1][: column_end - (&selection == 'inclusive' ? 1 : 2)]
@@ -52,9 +52,9 @@ elseif  a:mode ==# 'V'
 else
 return ''
 endif
-for line in lines
-echom line
-endfor
+" for line in lines
+" echom line
+" endfor
 return join(lines, "\n")
 endfunction
 
@@ -68,6 +68,7 @@ endfunction
 
 function! SubmitSel()
 :let @c= GetVisualSelection(visualmode()) . "\n"
+" :echom "test print value of c register " . @c
 :call writefile(getreg('c', 1, 1), "source_visual")
 :let @y = "source('source_visual',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], @y)
