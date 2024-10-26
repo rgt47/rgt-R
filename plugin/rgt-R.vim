@@ -66,12 +66,12 @@ augroup r_rmd_qmd
     autocmd!
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel1() \| :call Submit1()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c :call Brk()<CR><CR>
 " autocmd FileType r,rmd,qmd noremap <silent> <S-CR> :call Submit1()<CR><CR>
 " autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
 
-autocmd FileType r,rmd,qmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR><CR>
-autocmd FileType r,rmd,qmd noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR> \| /```{<CR>j
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c :call Brk()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR> \| /```{<CR>j
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
