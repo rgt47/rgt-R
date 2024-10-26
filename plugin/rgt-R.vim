@@ -71,8 +71,9 @@ autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
 \ :r !cat temp.txt \| sed 's/^/\# /g'<CR>
 "test to try to restrict <space>l to only rmd files to not conflict with victex
-autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call SubmitSel()<CR>
-autocmd FileType r,rmd,qmd noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call SubmitSel()<CR> \| /```{<CR>j
+autocmd FileType rmd noremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR><CR>
+
+autocmd FileType r,rmd,qmd noremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR> \| /```{<CR>j
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
