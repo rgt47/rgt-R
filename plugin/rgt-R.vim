@@ -1,7 +1,6 @@
 function! SelectChunk()
 	:execute "normal! ?```{\<cr>jV/```\<cr>k"
 endfunction
-
 function! MoveNextChunk()
 :execute "normal! /```{\<CR>j"
 :noh
@@ -46,20 +45,27 @@ y
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
+function! Submit1()
+:let y = "source('source_visual',echo=T)" . "\n"
+:let ty = type(y)
+echom "type of y is " . ty
+echom y
+:call term_sendkeys(term_list()[0], y)
+endfunction
 
-function! SubmitSel()
+function! Sel1()
 :let @c= GetVisualSelection(visualmode()) . "\n"
 :call writefile(getreg('c', 1, 1), "source_visual")
-:let @y = "source('source_visual',echo=T)" . "\n"
-:call term_sendkeys(term_list()[0], @y)
 endfunction
+
 
 augroup r_rmd_qmd
     autocmd!
 autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f Vatzf
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call SubmitSel()<CR><CR>
-autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
+autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel1() \| :call Submit1()<CR><CR>
+autocmd FileType r,rmd,qmd noremap <silent> <S-CR> :call Submit1()<CR><CR>
+" autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
 autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :w! temp.R<CR> \|
 \ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
 \ :call term_sendkeys(term_list()[0], @y)<CR> \|
