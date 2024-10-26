@@ -58,12 +58,15 @@ function! Sel1()
 :call writefile(getreg('c', 1, 1), "source_visual")
 endfunction
 
+function! Brk()
+:call term_sendkeys(term_list()[0], "\<c-c>")
+endfunction
 
 augroup r_rmd_qmd
     autocmd!
-autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f Vatzf
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
 autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel1() \| :call Submit1()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c :call Brk()<CR><CR>
 " autocmd FileType r,rmd,qmd noremap <silent> <S-CR> :call Submit1()<CR><CR>
 " autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
 
