@@ -48,10 +48,8 @@ endfunction
 
 function! Submit()
 :let y = "source('source_visual',echo=T)" . "\n"
-:let ty = type(y)
-echom "type of y is " . ty
-echom y
 :call term_sendkeys(term_list()[0], y)
+:call delete('source_visual')
 endfunction
 
 function! Sel()
