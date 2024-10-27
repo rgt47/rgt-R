@@ -49,7 +49,7 @@ endfunction
 function! Submit()
 :let y = "source('source_visual',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], y)
-:call delete('source_visual')
+" :call delete('source_visual')
 endfunction
 
 function! Sel()
