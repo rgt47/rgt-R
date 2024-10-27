@@ -61,6 +61,17 @@ function! Brk()
 :call term_sendkeys(term_list()[0], "\<c-c>")
 endfunction
 
+function! Submit2()
+:let y = "sink('temp.txt'); source('source_visual',echo=T); sink()" . "\n"
+:call term_sendkeys(term_list()[0], y)
+" :call delete('source_visual')
+endfunction
+
+function! Rd()
+!sed 's/^/\# /g' temp.txt > temp2.txt
+:r !cat temp2.txt 
+endfunction
+
 augroup r_rmd_qmd
     autocmd!
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
@@ -86,10 +97,8 @@ autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
+autocmd FileType r,rmd,qmd inoremap <localleader>a <esc>A \|><CR><C-o>0<space><space>
+autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :call Sel() \| :call Submit2() \| :call Rd()<CR><CR>
 augroup END
 
 
-autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :w! temp.R<CR> \|
-\ :let @y = "sink('temp.txt'); source('temp.R',echo=T); sink()" . "\n"<CR>
-\ :call term_sendkeys(term_list()[0], @y)<CR> \|
-\ :r !cat temp.txt \| sed 's/^/\# /g'<CR>

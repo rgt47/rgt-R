@@ -1,5 +1,7 @@
 library(ggplot2)
 data(iris)
+head(iris,3)
+
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point()+theme_bw()+
   labs(title = "Sepal Length vs Sepal Width", x = "Sepal Length", y = "Sepal Width")
