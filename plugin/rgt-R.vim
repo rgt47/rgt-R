@@ -1,6 +1,7 @@
 function! SelectChunk()
 	:execute "normal! ?```{\<cr>jV/```\<cr>k"
 endfunction
+
 function! MoveNextChunk()
 :execute "normal! /```{\<CR>j"
 :noh
@@ -45,7 +46,7 @@ y
 :call term_sendkeys(term_list()[0], @c)
 endfunction
 
-function! Submit1()
+function! Submit()
 :let y = "source('source_visual',echo=T)" . "\n"
 :let ty = type(y)
 echom "type of y is " . ty
@@ -53,7 +54,7 @@ echom y
 :call term_sendkeys(term_list()[0], y)
 endfunction
 
-function! Sel1()
+function! Sel()
 :let @c= GetVisualSelection(visualmode()) . "\n"
 :call writefile(getreg('c', 1, 1), "source_visual")
 endfunction
@@ -65,13 +66,10 @@ endfunction
 augroup r_rmd_qmd
     autocmd!
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel1() \| :call Submit1()<CR><CR>
-" autocmd FileType r,rmd,qmd noremap <silent> <S-CR> :call Submit1()<CR><CR>
-" autocmd FileType r,rmd,qmd vnoremap <silent> <S-CR> :call SubmitSelTest()<CR><CR>
-
+autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel() \| :call Submit()<CR><CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c :call Brk()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel1() \| :call Submit1()<CR> \| /```{<CR>j
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>j
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
