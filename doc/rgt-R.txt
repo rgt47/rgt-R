@@ -1,7 +1,10 @@
-*rgt-R.txt* rgt-R        tools to facilitate using R from vim
+*rgt-R.txt*   Tools to facilitate using R from vim
 
-rgt-R in ascii art goes here
+Author:  Ronald (Ryy) Thomas                                    *slime-author*
+License: Same terms as Vim itself (see |license|)
 
+==============================================================================
+                                                               *rgt-R*
 
            _        ____
  _ __ __ _| |_     |  _ \
@@ -15,13 +18,13 @@ Smooths the interaction with R in the console and vim.
 ====================================================================
 CONTENTS                                            *PotionContents*
 
-    1. Usage ................ |rgt-RUsage|
-    2. Mappings ............. |rgt-RMappings|
-    3. License .............. |rgt-RLicense|
-    4. Bugs ................. |rgt-RBugs|
-    5. Contributing ......... |rgt-RContributing|
-    6. Changelog ............ |rgt-RChangelog|
-    7. Credits .............. |rgt-RCredits|
+    1. Usage ................ |rgt-R Usage|
+    2. Mappings ............. |rgt-R Mappings|
+    3. License .............. |rgt-R License|
+    4. Bugs ................. |rgt-R Bugs|
+    5. Contributing ......... |rgt-R Contributing|
+    6. Changelog ............ |rgt-R Changelog|
+    7. Credits .............. |rgt-R Credits|
 
 RGT-R - TABLE OF CONTENTS             *easyalign* *easy-align* *easy-align-toc*
 ==============================================================================
