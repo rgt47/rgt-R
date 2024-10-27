@@ -40,12 +40,6 @@ return join(lines, "\n")
 endfunction
 
 
-function! SubmitSelTest()
-y
-:let @c=@" . "\n"
-:call term_sendkeys(term_list()[0], @c)
-endfunction
-
 function! Submit()
 :let y = "source('source_visual',echo=T)" . "\n"
 :call term_sendkeys(term_list()[0], y)
@@ -61,30 +55,38 @@ function! Brk()
 :call term_sendkeys(term_list()[0], "\<c-c>")
 endfunction
 
-function! Submit2()
+function! SubmitEmbed()
 :let y = "sink('temp.txt'); source('source_visual',echo=T); sink()" . "\n"
 :call term_sendkeys(term_list()[0], y)
 " :call delete('source_visual')
 endfunction
 
 function! Rd()
-!sed 's/^/\# /g' temp.txt > temp2.txt
-:r !cat temp2.txt 
+!sed 's/^/\# /g' temp.txt > temp_commented.txt
+:r !cat temp_commented.txt 
 endfunction
 
 augroup r_rmd_qmd
     autocmd!
 autocmd FileType r,rmd,qmd nnoremap <silent> <CR> :call SubmitLine()<CR><CR>
-autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel() \| :call Submit()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c :call Brk()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>j
+autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel() \| 
+			\ :call Submit()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c 
+			\ :call Brk()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l 
+	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; 
+\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>j
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r :vert term R  --no-save<CR><c-w>:wincmd p<CR>
-autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 'render("<C-r>%", output_format="pdf_document")'<CR>
-autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 'quarto_render("<C-r>%", output_format="pdf")'<CR>
-autocmd FileType r,rmd,qmd tnoremap ZD quarto::quarto_render(output_format = "pdf")<CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>r 
+			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 
+			\ 'render("<C-r>%", output_format="pdf_document")'<CR>
+autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 
+			\ 'quarto_render("<C-r>%", output_format="pdf")'<CR>
+autocmd FileType r,rmd,qmd tnoremap ZD 
+			\ quarto::quarto_render(output_format = "pdf")<CR>
 autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
 autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
 autocmd FileType r,rmd,qmd tnoremap ZS style_dir()<CR>
@@ -97,8 +99,10 @@ autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
-autocmd FileType r,rmd,qmd inoremap <localleader>a <esc>A \|><CR><C-o>0<space><space>
-autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z :call Sel() \| :call Submit2() \| :call Rd()<CR><CR>
+autocmd FileType r,rmd,qmd inoremap <localleader>a 
+			\ <esc>A \|><CR><C-o>0<space><space>
+autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z 
+		\ :call Sel() \| :call SubmitEmbed() \| :call Rd()<CR><CR>
 augroup END
 
 
