@@ -1,0 +1,2 @@
+**rgt-R.txt** tools to facilitate using R from vim
+
