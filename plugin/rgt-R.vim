@@ -99,6 +99,7 @@ autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>g :call Raction("glimpse")<CR>
 autocmd FileType r,rmd,qmd inoremap <c-l> 
 			\ <esc>A \|><CR><C-o>0<space><space>
 autocmd FileType r,rmd,qmd vnoremap <silent> <localleader>z 

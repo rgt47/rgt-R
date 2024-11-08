@@ -38,21 +38,54 @@ RGT-R - TABLE OF CONTENTS             *easyalign* *easy-align* *easy-align-toc*
 
 ==============================================================================
 
-A simple, easy-to-use Vim alignment plugin.
+A simple, easy-to-use Vim R interface plugin.
 
 
                                                                *rgt-R-Usage*
-DEMO                                                           *demo*
 ==============================================================================
 
-Screencast:
-https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align.gif
+Key bindings
 
-(Too fast? Slower GIF is {here}{1})
+Note: The <LocalLeader> is '<Space>' by default.
 
-{1} https://raw.githubusercontent.com/junegunn/i/master/vim-easy-align-slow.gif
+The plugin keybindings are available for files with filetypes 'r', 'rmd', and
+'qmd'. 
+To open a terminal running R type <Space>r. 
+Use the keybindings listed below to send lines of commands to R. 
 
+Start/Close
+  . Start R                                            <Space>r
+  --------------------------------------------------------
+  . Close R (no save)                                  <Space>d (??)
+  . Interrupt R parsing                                <Space>c
+-----------------------------------------------------------
 
+Send
+  . File                                               \aa
+  . File (echo)                                        \ae
+  . File (open .Rout)                                  \ao
+  --------------------------------------------------------
+  . Block (cur)                                        \bb
+  . Block (cur, echo)                                  \be
+  . Block (cur, down)                                  \bd
+  . Block (cur, echo and down)                         \ba
+  --------------------------------------------------------
+  . Chunk (cur)                                        \cc
+  . Chunk (cur, echo)                                  \ce
+  . Chunk (cur, down)                                  \cd
+  . Chunk (cur, echo and down)                         \ca
+  . Chunk (from first to here)                         \ch
+  --------------------------------------------------------
+  . Function (cur)                                     \ff
+  . Function (cur, echo)                               \fe
+  . Function (cur and down)                            \fd
+  . Function (cur, echo and down)                      \fa
+  --------------------------------------------------------
+  . Selection                                          \ss
+  . Selection (echo)                                   \se
+  . Selection (and down)                               \sd
+  . Selection (echo and down)                          \sa
+  . Selection (evaluate and insert output in new tab)  \so
 FEATURES                                                   *rgt-R-features*
 ==============================================================================
 
@@ -93,6 +126,7 @@ LICENSE                                                     *easy-align-license*
 ==============================================================================
 
 MIT
+
 
 ==============================================================================
 vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
