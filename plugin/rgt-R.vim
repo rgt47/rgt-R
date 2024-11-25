@@ -75,7 +75,7 @@ autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c
 			\ :call Brk()<CR><CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l 
 	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
-# send chunk to R and move to next chunk and center vertically 
+" send chunk to R and move to next chunk and center vertically 
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>; 
 \ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz
 autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
