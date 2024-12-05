@@ -56,7 +56,7 @@ function! Brk()
 endfunction
 
 function! BrowserBrk()
-:call term_sendkeys(term_list()[0], "Q")
+:call term_sendkeys(term_list()[0], "Q\n")
 endfunction
 
 function! SubmitEmbed()
