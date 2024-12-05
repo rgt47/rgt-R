@@ -55,6 +55,10 @@ function! Brk()
 :call term_sendkeys(term_list()[0], "\<c-c>")
 endfunction
 
+function! BrowserBrk()
+:call term_sendkeys(term_list()[0], "Q")
+endfunction
+
 function! SubmitEmbed()
 :let y = "sink('temp.txt'); source('source_visual',echo=T); sink()" . "\n"
 :call term_sendkeys(term_list()[0], y)
@@ -73,6 +77,8 @@ autocmd FileType r,rmd,qmd vnoremap <silent> <CR> :call Sel() \|
 			\ :call Submit()<CR><CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>c 
 			\ :call Brk()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>q 
+			\ :call BrowserBrk()<CR><CR>
 autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>l 
 	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
 " send chunk to R and move to next chunk and center vertically 
@@ -90,10 +96,8 @@ autocmd FileType r,rmd,qmd tnoremap ZD
 			\ quarto::quarto_render(output_format = "pdf")<CR>
 autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
 autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
-autocmd FileType r,rmd,qmd tnoremap ZS style_dir()<CR>
 autocmd FileType r,rmd,qmd tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
 autocmd FileType r,rmd,qmd tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
-autocmd FileType r,rmd,qmd tnoremap lf ls()<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR>
 autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
