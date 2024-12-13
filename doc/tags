@@ -1,0 +1,16 @@
+GetVisualSelection(mode)	rgt-R.txt	/*GetVisualSelection(mode)*
+MoveNextChunk()	rgt-R.txt	/*MoveNextChunk()*
+MovePrevChunk()	rgt-R.txt	/*MovePrevChunk()*
+Raction(action)	rgt-R.txt	/*Raction(action)*
+SelectChunk()	rgt-R.txt	/*SelectChunk()*
+SubmitLine()	rgt-R.txt	/*SubmitLine()*
+rgt-R-GetVisualSelection	rgt-R.txt	/*rgt-R-GetVisualSelection*
+rgt-R-MoveNextChunk	rgt-R.txt	/*rgt-R-MoveNextChunk*
+rgt-R-MovePrevChunk	rgt-R.txt	/*rgt-R-MovePrevChunk*
+rgt-R-Raction	rgt-R.txt	/*rgt-R-Raction*
+rgt-R-SelectChunk	rgt-R.txt	/*rgt-R-SelectChunk*
+rgt-R-SubmitLine	rgt-R.txt	/*rgt-R-SubmitLine*
+rgt-R-functions	rgt-R.txt	/*rgt-R-functions*
+rgt-R-functions-mappings	rgt-R.txt	/*rgt-R-functions-mappings*
+rgt-R-installation	rgt-R.txt	/*rgt-R-installation*
+rgt-R-mappings	rgt-R.txt	/*rgt-R-mappings*
