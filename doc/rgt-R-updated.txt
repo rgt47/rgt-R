@@ -1,0 +1,99 @@
+
+*rgt-R-functions-mappings*    Vimscript Functions and Mappings Documentation
+
+This section provides detailed information about the Vimscript functions and key mappings defined in the `rgt-R.vim` script.
+
+==============================================================================
+FUNCTIONS                                               *rgt-R-functions*
+
+1. *SelectChunk()*                                      *rgt-R-SelectChunk*
+   **Description**:
+   Selects a markdown chunk (enclosed in triple backticks) by searching backward and entering visual mode.
+   - Searches for the opening backticks (` ```{ `).
+   - Highlights the chunk.
+
+   **Errors**:
+   - Outputs a message if no matching markdown chunk is found.
+
+2. *MoveNextChunk()*                                   *rgt-R-MoveNextChunk*
+   **Description**:
+   Moves the cursor to the start of the next markdown chunk in the document.
+   - Searches forward for the opening backticks (` ```{ `).
+
+   **Errors**:
+   - Outputs a message if no further markdown chunks are found.
+
+3. *MovePrevChunk()*                                   *rgt-R-MovePrevChunk*
+   **Description**:
+   Moves the cursor to the start of the previous markdown chunk in the document.
+   - Searches backward for the opening backticks (` ```{ `).
+
+   **Errors**:
+   - Outputs a message if no previous markdown chunks are found.
+
+4. *Raction(action)*                                    *rgt-R-Raction*
+   **Description**:
+   Executes a given R action on the word under the cursor and sends the result to the terminal.
+   - Constructs a command using the provided `action` and the word under the cursor.
+   - Sends the command to the terminal.
+
+   **Parameters**:
+   - `action` (string): The R action to apply (e.g., "print", "names").
+
+5. *SubmitLine()*                                       *rgt-R-SubmitLine*
+   **Description**:
+   Sends the current line of the document to the terminal.
+
+6. *GetVisualSelection(mode)*                          *rgt-R-GetVisualSelection*
+   **Description**:
+   Retrieves the text currently selected in visual mode and returns it as a string.
+   - Supports character-wise (`'v'`) and line-wise (`'V'`) visual modes.
+   - Trims the text for character-wise selection.
+
+   **Parameters**:
+   - `mode` (string): The visual mode (`'v'` for character-wise, `'V'` for line-wise).
+
+   **Errors**:
+   - Outputs a message if an unsupported mode is detected.
+
+   **Returns**:
+   - A string containing the selected text.
+
+==============================================================================
+
+MAPPINGS                                                *rgt-R-mappings*
+
+The following key mappings are available for files with filetypes `r`, `rmd`, and `qmd`.
+
+### Navigation
+1. **Navigate to Markdown Chunks**:
+   - `<LocalLeader>k`: Move to the previous markdown chunk (`MovePrevChunk`).
+   - `<LocalLeader>j`: Move to the next markdown chunk (`MoveNextChunk`).
+
+### Sending Commands to Terminal
+2. **Send Commands**:
+   - `<CR>`: Sends the current line to the terminal (`SubmitLine`). *(Consider customizing if this overrides common workflows.)*
+
+3. **R Action Mappings**:
+   Perform R-specific actions on the word under the cursor:
+   - `<LocalLeader>d`: Perform the "dim()" action.
+   - `<LocalLeader>h`: Perform the "head()" action.
+   - `<LocalLeader>n`: Perform the "names()" action.
+   - `<LocalLeader>p`: Perform the "print()" action.
+   - `<LocalLeader>f`: Perform the "length()" action.
+
+4. **Miscellaneous Terminal Commands**:
+   - `ZT`: Execute `R --quiet -e` in the terminal.
+   - `ZR`: Render the current file in the terminal.
+
+==============================================================================
+
+INSTALLATION                                            *rgt-R-installation*
+
+Use your preferred plugin manager to install `rgt-R.vim`. Example using vim-plug:
+
+    Plug 'username/rgt-R.vim'
+
+==============================================================================
+
+vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
