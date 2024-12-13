@@ -76,3 +76,6 @@ autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rh :call Raction("head")<CR> " 
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rn :call Raction("names")<CR> " Perform names() on the word under the cursor
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rp :call Raction("print")<CR> " Perform print() on the word under the cursor
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rf :call Raction("length")<CR> " Perform length() on the word under the cursor
+
+autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>rs 
+			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
