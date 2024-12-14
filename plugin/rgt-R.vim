@@ -205,8 +205,8 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")<CR>
 
     " Insert a pipe and move to the next line in insert and normal mode
-    autocmd FileType r,rmd,qmd inoremap <buffer> <c-l> <esc>A |><CR><C-o>0<space><space>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <c-l> A |><CR>0<space><space>
+    " autocmd FileType r,rmd,qmd inoremap <buffer> <c-l> <esc>A |><CR><C-o>0<space><space>
+    " autocmd FileType r,rmd,qmd nnoremap <buffer> <c-l> A |><CR>0<space><space>
 
     " Submit the selected text as embedded and display output as comments
     autocmd FileType r,rmd,qmd vnoremap <buffer> <localleader>z :call Sel() \| :call SubmitEmbed() \| :call Rd()<CR><CR>
