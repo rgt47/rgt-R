@@ -144,6 +144,8 @@ endfunction
 function! s:CheckTerminalAndSubmitLineNormal() abort
     if s:has_r_terminal()
         call SubmitLine()
+        " Move to the next line after submitting
+        normal! j
     else
         echo "No R terminal available."
     endif
