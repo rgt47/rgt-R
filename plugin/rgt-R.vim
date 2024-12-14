@@ -6,7 +6,7 @@ function! SelectChunk()
             echo "No matching closing backticks found"
         endif
     else
-        echo "No markdown chunks found above"
+        echo "No rmarkdown chunks found above"
     endif
 endfunction
 
@@ -64,6 +64,35 @@ function! GetVisualSelection(mode)
     return join(lines, "\n")
 endfunction
 
+function! Submit()
+:let y = "source('source_visual',echo=T)" . "\n"
+:call term_sendkeys(term_list()[0], y)
+" :call delete('source_visual')
+endfunction
+
+function! Sel()
+:let @c= GetVisualSelection(visualmode()) . "\n"
+:call writefile(getreg('c', 1, 1), "source_visual")
+endfunction
+
+function! Brk()
+:call term_sendkeys(term_list()[0], "\<c-c>")
+endfunction
+
+function! BrowserBrk()
+:call term_sendkeys(term_list()[0], "Q\n")
+endfunction
+
+function! SubmitEmbed()
+:let y = "sink('temp.txt'); source('source_visual',echo=T); sink()" . "\n"
+:call term_sendkeys(term_list()[0], y)
+" :call delete('source_visual')
+endfunction
+
+function! Rd()
+!sed 's/^/\# /g' temp.txt > temp_commented.txt
+:r !cat temp_commented.txt 
+endfunction
 " Key mappings
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>sc :call SelectChunk()<CR> " Select a markdown chunk
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>mn :call MoveNextChunk()<CR> " Move to the next markdown chunk
@@ -77,5 +106,41 @@ autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rn :call Raction("names")<CR> "
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rp :call Raction("print")<CR> " Perform print() on the word under the cursor
 autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rf :call Raction("length")<CR> " Perform length() on the word under the cursor
 
-autocmd FileType r,rmd,qmd nnoremap <silent> <localleader>rs 
+autocmd FileType r,rmd,qmd nnoremap <localleader>rs 
 			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+autocmd FileType r,rmd,qmd nnoremap <CR> :call SubmitLine()<CR><CR>
+autocmd FileType r,rmd,qmd vnoremap <CR> :call Sel() \| 
+			\ :call Submit()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>c 
+			\ :call Brk()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>q 
+			\ :call BrowserBrk()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>l 
+	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
+" send chunk to R and move to next chunk and center vertically 
+autocmd FileType r,rmd,qmd nnoremap <localleader>; 
+\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz
+autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>r 
+			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 
+			\ 'render("<C-r>%", output_format="pdf_document")'<CR>
+autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 
+			\ 'quarto_render("<C-r>%", output_format="pdf")'<CR>
+autocmd FileType r,rmd,qmd tnoremap ZD 
+			\ quarto::quarto_render(output_format = "pdf")<CR>
+autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
+autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
+autocmd FileType r,rmd,qmd tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
+autocmd FileType r,rmd,qmd tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>g :call Raction("glimpse")<CR>
+autocmd FileType r,rmd,qmd inoremap <c-l>  <esc>A \|><CR><C-o>0<space><space>
+autocmd FileType r,rmd,qmd nnoremap <c-l> A \|><CR>0<space><space>
+autocmd FileType r,rmd,qmd vnoremap <localleader>z  :call Sel() \| :call SubmitEmbed() \| :call Rd()<CR><CR>
