@@ -92,9 +92,21 @@ function! SubmitLine() abort
     call s:send_to_r(current_line)
 endfunction
 
-" Submit selected code
 function! Submit() abort
-    let cmd = "source('source_visual',echo=T)\n"
+    if !exists("g:source_file")
+        echo "No source file available."
+        return
+    endif
+    let cmd = "source('" . g:source_file . "', echo=T)\n"
+    call s:send_to_r(cmd)
+endfunction
+
+function! SubmitEmbed() abort
+    if !exists("g:source_file")
+        echo "No source file available."
+        return
+    endif
+    let cmd = "sink('temp.txt'); source('" . g:source_file . "',echo=T); sink()\n"
     call s:send_to_r(cmd)
 endfunction
 
@@ -116,16 +128,6 @@ endfunction
 " Break the R debug browser
 function! BrowserBrk() abort
     call s:send_to_r("Q\n")
-endfunction
-
-" Submit embedded code and capture output
-function! SubmitEmbed() abort
-    if !exists("g:source_file")
-        echo "No source file available."
-        return
-    endif
-    let cmd = "sink('temp.txt'); source('" . g:source_file . "',echo=T); sink()\n"
-    call s:send_to_r(cmd)
 endfunction
 
 " Read the output back as commented lines
