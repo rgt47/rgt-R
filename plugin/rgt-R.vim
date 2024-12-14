@@ -1,5 +1,5 @@
 " rgt-R.vim
-" A Vimscript plugin for working with R and R Markdown files, sending code to an R terminal.
+" A Vim plugin for working with R and R Markdown files, sending code to an R terminal.
 
 "------------------------------------------------------------------------------
 " Utility Functions
@@ -135,18 +135,19 @@ function! Rd() abort
 endfunction
 
 "------------------------------------------------------------------------------
-" Conditional Checks for Maps
+" Check and Submit Functions
 "------------------------------------------------------------------------------
 
-" Called by insert mode <CR>: submit line if terminal available, else just newline
-function! s:CheckTerminalAndSubmitLine() abort
+" Called by normal mode <CR>: submit line if terminal available, else show message
+function! s:CheckTerminalAndSubmitLineNormal() abort
     if s:has_r_terminal()
         call SubmitLine()
+    else
+        echo "No R terminal available."
     endif
-    return "\<CR>"
 endfunction
 
-" Called by visual mode <CR>: submit selection if terminal available, else do nothing
+" Called by visual mode <CR>: submit selection if terminal available, else show message
 function! s:CheckTerminalAndSubmitVisual() abort
     if s:has_r_terminal()
         call Sel()
@@ -162,11 +163,10 @@ endfunction
 
 augroup RMarkdownMappings
     autocmd!
-    " Insert mode: Press <CR> to submit line if R terminal is open, else just newline
-    autocmd FileType r,rmd,qmd inoremap <buffer> <CR> <C-r>=<SID>CheckTerminalAndSubmitLine()<CR>
+    " Normal mode: Press <CR> to submit line if R terminal open, else show message
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <CR> :call <SID>CheckTerminalAndSubmitLineNormal()<CR>
 
-    " Visual mode: Press <CR> to submit selection if R terminal is open
-    " Replace original direct calls with our checking function
+    " Visual mode: Press <CR> to submit selection if R terminal open, else show message
     autocmd FileType r,rmd,qmd xnoremap <buffer> <CR> :<C-u>call <SID>CheckTerminalAndSubmitVisual()<CR>
 
     " Break the current R process
@@ -204,7 +204,7 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f :call Raction("length")<CR>
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")<CR>
 
-    " Insert a pipe and move to the next line
+    " Insert a pipe and move to the next line in insert and normal mode
     autocmd FileType r,rmd,qmd inoremap <buffer> <c-l> <esc>A |><CR><C-o>0<space><space>
     autocmd FileType r,rmd,qmd nnoremap <buffer> <c-l> A |><CR>0<space><space>
 
