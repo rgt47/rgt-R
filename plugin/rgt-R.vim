@@ -93,54 +93,35 @@ function! Rd()
 !sed 's/^/\# /g' temp.txt > temp_commented.txt
 :r !cat temp_commented.txt 
 endfunction
+
 " Key mappings
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>sc :call SelectChunk()<CR> " Select a markdown chunk
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>mn :call MoveNextChunk()<CR> " Move to the next markdown chunk
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>mp :call MovePrevChunk()<CR> " Move to the previous markdown chunk
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>sl :call SubmitLine()<CR> " Submit the current line to the terminal
-
-" Raction mappings
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rd :call Raction("dim")<CR> " Perform dim() on the word under the cursor
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rh :call Raction("head")<CR> " Perform head() on the word under the cursor
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rn :call Raction("names")<CR> " Perform names() on the word under the cursor
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rp :call Raction("print")<CR> " Perform print() on the word under the cursor
-autocmd FileType r,rmd,qmd nnoremap <LocalLeader>rf :call Raction("length")<CR> " Perform length() on the word under the cursor
-
-autocmd FileType r,rmd,qmd nnoremap <localleader>rs 
-			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
-autocmd FileType r,rmd,qmd nnoremap <CR> :call SubmitLine()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <CR> :call SubmitLine()<CR><CR> " Submit the current line to the terminal
 autocmd FileType r,rmd,qmd vnoremap <CR> :call Sel() \| 
-			\ :call Submit()<CR><CR>
+			\ :call Submit()<CR><CR> " Submit the selected text to the terminal
 autocmd FileType r,rmd,qmd nnoremap <localleader>c 
-			\ :call Brk()<CR><CR>
+			\ :call Brk()<CR><CR> " Break the current R process
 autocmd FileType r,rmd,qmd nnoremap <localleader>q 
-			\ :call BrowserBrk()<CR><CR>
+			\ :call BrowserBrk()<CR><CR> " Break the current R debug process
 autocmd FileType r,rmd,qmd nnoremap <localleader>l 
-	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
+	\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR> " Select a chunk and send it to R
 " send chunk to R and move to next chunk and center vertically 
 autocmd FileType r,rmd,qmd nnoremap <localleader>; 
-\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz
-autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR>
+\ :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz " Select a chunk and send it to R, move to next chunk and center vertically
+autocmd FileType r,rmd,qmd nnoremap <localleader>k :call MovePrevChunk()<CR> " Move to the previous rmarkdown chunk
+autocmd FileType r,rmd,qmd nnoremap <localleader>j :call MoveNextChunk()<CR> " Move to the next rmarkdown chunk
 autocmd FileType r,rmd,qmd nnoremap <localleader>r 
-			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR>
+			\ :vert term R  --no-save<CR><c-w>:wincmd p<CR> " Open an R terminal
 autocmd FileType r,rmd,qmd nnoremap ZT :!R --quiet -e 
-			\ 'render("<C-r>%", output_format="pdf_document")'<CR>
-autocmd FileType r,rmd,qmd nnoremap ZY :!R --quiet -e 
-			\ 'quarto_render("<C-r>%", output_format="pdf")'<CR>
-autocmd FileType r,rmd,qmd tnoremap ZD 
-			\ quarto::quarto_render(output_format = "pdf")<CR>
-autocmd FileType r,rmd,qmd tnoremap ZO source("<C-W>"%")
-autocmd FileType r,rmd,qmd tnoremap ZR render("<C-W>"%")<CR>
+			\ 'render("<C-r>%", output_format="pdf_document")'<CR> " Render the current Rmd file to PDF
 autocmd FileType r,rmd,qmd tnoremap ZQ q('no')<C-\><C-n>:q!<CR>
 autocmd FileType r,rmd,qmd tnoremap ZZ q('no')<C-\><C-n>:q!<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR>
-autocmd FileType r,rmd,qmd nnoremap <localleader>g :call Raction("glimpse")<CR>
-autocmd FileType r,rmd,qmd inoremap <c-l>  <esc>A \|><CR><C-o>0<space><space>
-autocmd FileType r,rmd,qmd nnoremap <c-l> A \|><CR>0<space><space>
-autocmd FileType r,rmd,qmd vnoremap <localleader>z  :call Sel() \| :call SubmitEmbed() \| :call Rd()<CR><CR>
+autocmd FileType r,rmd,qmd nnoremap <localleader>d :call Raction("dim")<CR> " Perform dim() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>h :call Raction("head")<CR> " Perform head() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>s :call Raction("str")<CR> " Perform str() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>p :call Raction("print")<CR> " Perform print() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>n :call Raction("names")<CR> " Perform names() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>f :call Raction("length")<CR> " Perform length() on the word under the cursor
+autocmd FileType r,rmd,qmd nnoremap <localleader>g :call Raction("glimpse")<CR> " Perform glimpse() on the word under the cursor
+autocmd FileType r,rmd,qmd inoremap <c-l>  <esc>A \|><CR><C-o>0<space><space> " Insert a pipe and move to the next line
+autocmd FileType r,rmd,qmd nnoremap <c-l> A \|><CR>0<space><space> " Insert a pipe and move to the next line
+autocmd FileType r,rmd,qmd vnoremap <localleader>z  :call Sel() \| :call SubmitEmbed() \| :call Rd()<CR><CR> " Submit the selected text to the terminal and display the output as a comment
