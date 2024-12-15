@@ -196,8 +196,8 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> ZT :!R --quiet -e 'rmarkdown::render("<C-r>%", output_format="pdf_document")'<CR>
 
     " Terminal mode quit mappings
-    autocmd FileType r,rmd,qmd tnoremap <buffer> ZQ q('no')<C-\><C-n>:q!<CR>
-    autocmd FileType r,rmd,qmd tnoremap <buffer> ZZ q('no')<C-\><C-n>:q!<CR>
+    autocmd FileType r,rmd,qmd tnoremap <buffer> ZQ q('no')<CR>
+    autocmd FileType r,rmd,qmd tnoremap <buffer> ZZ q('no')<CR>
 
     " Perform actions on the word under cursor
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>d :call Raction("dim")<CR>
