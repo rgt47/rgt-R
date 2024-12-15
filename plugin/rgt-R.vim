@@ -215,12 +215,8 @@ nnoremap <silent> <localleader>e :call AddPipeAndNewLine()<CR>
 inoremap <silent> <localleader>e <Esc>:call AddPipeAndNewLine()<CR>i
 
 function! AddPipeAndNewLine()
-    " Append '|>' to the end of the current line
-    normal! A|>
-    " Insert a new line and move the cursor there
-    normal! o
-    " Insert two spaces for indentation
-    normal! i  " Two spaces
+    " Append '|>', add a new line, and indent with two spaces
+    normal! A|>o<Space><Space>i
 endfunction
 
     " Submit the selected text as embedded and display output as comments

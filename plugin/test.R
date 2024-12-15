@@ -1,2 +1,6 @@
 1
-line one 
+line one |>
+  " Two spaces
+
+  lien three|>
+  " Two space;es
