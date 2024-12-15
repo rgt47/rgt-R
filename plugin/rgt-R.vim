@@ -197,7 +197,7 @@ augroup RMarkdownMappings
 
     " Terminal mode quit mappings
     " autocmd FileType r,rmd,qmd tnoremap <buffer> ZQ q('no')<CR>
-     autocmd FileType r,rmd,qmd tnoremap <buffer> ZZ <C-d>
+     " autocmd FileType r,rmd,qmd tnoremap <buffer> ZZ <C-d>
 
     " Perform actions on the word under cursor
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>d :call Raction("dim")<CR>
