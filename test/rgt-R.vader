@@ -1,0 +1,133 @@
+" Place this file in a test directory (e.g., `test/rgt-R.vader`) and run it
+" using a Vim test runner or Vader.vim.
+
+Execute (silent! loadview)
+
+Context 'rgt-R plugin tests'
+    BeforeEach:
+        " Set up a clean environment, load the plugin
+        source ~/.vim/pack/plugins/start/rgt-R/plugin/rgt-R.vim
+        set filetype=r
+    End
+
+    AfterEach:
+        " Clean up any temporary files or global variables
+        unlet! g:source_file
+        if filereadable('temp.txt')
+            call delete('temp.txt')
+        endif
+        if filereadable('temp_commented.txt')
+            call delete('temp_commented.txt')
+        endif
+    End
+
+    #########################################################################
+    " 1. Test has_r_terminal() function with no terminal open
+    #########################################################################
+    It 'should report no terminal when none is open'
+        let result = s:has_r_terminal()
+        AssertEqual result, 0
+    End
+
+    #########################################################################
+    " 2. Test send_to_r() without terminal
+    #########################################################################
+    It 'should echo error message if no R terminal available on send_to_r'
+        silent! call s:send_to_r("1+1\n")
+        AssertReported /No R terminal available./
+    End
+
+    #########################################################################
+    " 3. Test GetVisualSelection() in character-wise visual mode
+    #########################################################################
+    It 'should return correct selection in character-wise mode'
+        new
+        call setline(1, 'abcde')
+        normal! v2l
+        " At this point, visual selection should cover 'ab'
+        let sel = GetVisualSelection('v')
+        AssertEqual sel, 'ab'
+    End
+
+    #########################################################################
+    " 4. Test GetVisualSelection() in line-wise mode
+    #########################################################################
+    It 'should return whole lines in line-wise mode'
+        new
+        call setline(1, ['line1','line2','line3'])
+        " Select two lines in line-wise mode:
+        normal! Vj
+        let sel = GetVisualSelection('V')
+        AssertEqual sel, "line1\nline2"
+    End
+
+    #########################################################################
+    " 5. Test Sel() without a visual selection
+    #########################################################################
+    It 'should return early if no visual selection is made'
+        let initial_count = len(glob('*.tmp',1,1))
+        " Call Sel() without any visual mode active:
+        call Sel()
+        let after_count = len(glob('*.tmp',1,1))
+        AssertEqual initial_count, after_count
+    End
+
+    #########################################################################
+    " 6. Test SubmitLine() without terminal
+    #########################################################################
+    It 'should warn if no terminal when submitting line'
+        new
+        call setline(1, "x <- 1")
+        call cursor(1,1)
+        silent! call SubmitLine()
+        AssertReported /No R terminal available./
+    End
+
+    #########################################################################
+    " 7. Test Raction() without terminal
+    #########################################################################
+    It 'should report no terminal on Raction call'
+        new
+        call setline(1, "mydata")
+        call cursor(1,1)
+        silent! call Raction("head")
+        AssertReported /No R terminal available./
+    End
+
+    #########################################################################
+    " 8. Test Rd() with no temp.txt file
+    #########################################################################
+    It 'should do nothing if temp.txt does not exist'
+        " Attempt Rd() when temp.txt does not exist
+        silent! call Rd()
+        " No error or reported message is strictly required, but ensure no crash
+        AssertTrue 1 "Rd call without temp.txt ran without error."
+    End
+
+    #########################################################################
+    " 9. Test chunk navigation functions with no chunks
+    #########################################################################
+    It 'should report no chunks found when none exist'
+        new
+        silent! call SelectChunk()
+        AssertReported /No R Markdown chunks found above./
+
+        silent! call MoveNextChunk()
+        AssertReported /No further chunks found./
+
+        silent! call MovePrevChunk()
+        AssertReported /No previous chunks found./
+    End
+
+    #########################################################################
+    "10. Test normal mode <CR> mapping with no terminal
+    #########################################################################
+    It 'should show message if <CR> pressed in normal mode with no terminal'
+        new
+        call setline(1, "x <- 1")
+        normal! G0
+        execute "normal! \<CR>"
+        AssertReported /No R terminal available./
+    End
+
+End

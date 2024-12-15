@@ -1,99 +1,103 @@
-
-*rgt-R-functions-mappings*    Vimscript Functions and Mappings Documentation
-
-This section provides detailed information about the Vimscript functions and key mappings defined in the `rgt-R.vim` script.
+*rgt-R.txt*    A Vim plugin for working with R and R Markdown files
 
 ==============================================================================
-FUNCTIONS                                               *rgt-R-functions*
-
-1. *SelectChunk()*                                      *rgt-R-SelectChunk*
-   **Description**:
-   Selects a markdown chunk (enclosed in triple backticks) by searching backward and entering visual mode.
-   - Searches for the opening backticks (` ```{ `).
-   - Highlights the chunk.
-
-   **Errors**:
-   - Outputs a message if no matching markdown chunk is found.
-
-2. *MoveNextChunk()*                                   *rgt-R-MoveNextChunk*
-   **Description**:
-   Moves the cursor to the start of the next markdown chunk in the document.
-   - Searches forward for the opening backticks (` ```{ `).
-
-   **Errors**:
-   - Outputs a message if no further markdown chunks are found.
-
-3. *MovePrevChunk()*                                   *rgt-R-MovePrevChunk*
-   **Description**:
-   Moves the cursor to the start of the previous markdown chunk in the document.
-   - Searches backward for the opening backticks (` ```{ `).
-
-   **Errors**:
-   - Outputs a message if no previous markdown chunks are found.
-
-4. *Raction(action)*                                    *rgt-R-Raction*
-   **Description**:
-   Executes a given R action on the word under the cursor and sends the result to the terminal.
-   - Constructs a command using the provided `action` and the word under the cursor.
-   - Sends the command to the terminal.
-
-   **Parameters**:
-   - `action` (string): The R action to apply (e.g., "print", "names").
-
-5. *SubmitLine()*                                       *rgt-R-SubmitLine*
-   **Description**:
-   Sends the current line of the document to the terminal.
-
-6. *GetVisualSelection(mode)*                          *rgt-R-GetVisualSelection*
-   **Description**:
-   Retrieves the text currently selected in visual mode and returns it as a string.
-   - Supports character-wise (`'v'`) and line-wise (`'V'`) visual modes.
-   - Trims the text for character-wise selection.
-
-   **Parameters**:
-   - `mode` (string): The visual mode (`'v'` for character-wise, `'V'` for line-wise).
-
-   **Errors**:
-   - Outputs a message if an unsupported mode is detected.
-
-   **Returns**:
-   - A string containing the selected text.
+NAME
+    rgt-R - Interact with R and R Markdown files directly from Vim
 
 ==============================================================================
+DESCRIPTION
+The rgt-R plugin provides convenience mappings and commands for sending code
+from R, R Markdown (`.Rmd`), and Quarto (`.qmd`) files to an R terminal
+embedded within Vim. It allows you to:
 
-MAPPINGS                                                *rgt-R-mappings*
+- Submit the current line or a visual selection of code to R.
+- Navigate and send R Markdown code chunks to R.
+- Perform common R operations (e.g., `head()`, `str()`, `dim()`) on the word under the cursor.
+- Break out of a running R process or R’s debugging browser.
+- Render R Markdown files to PDF using `rmarkdown::render()`.
 
-The following key mappings are available for files with filetypes `r`, `rmd`, and `qmd`.
-
-### Navigation
-1. **Navigate to Markdown Chunks**:
-   - `<LocalLeader>k`: Move to the previous markdown chunk (`MovePrevChunk`).
-   - `<LocalLeader>j`: Move to the next markdown chunk (`MoveNextChunk`).
-
-### Sending Commands to Terminal
-2. **Send Commands**:
-   - `<CR>`: Sends the current line to the terminal (`SubmitLine`). *(Consider customizing if this overrides common workflows.)*
-
-3. **R Action Mappings**:
-   Perform R-specific actions on the word under the cursor:
-   - `<LocalLeader>d`: Perform the "dim()" action.
-   - `<LocalLeader>h`: Perform the "head()" action.
-   - `<LocalLeader>n`: Perform the "names()" action.
-   - `<LocalLeader>p`: Perform the "print()" action.
-   - `<LocalLeader>f`: Perform the "length()" action.
-
-4. **Miscellaneous Terminal Commands**:
-   - `ZT`: Execute `R --quiet -e` in the terminal.
-   - `ZR`: Render the current file in the terminal.
+This plugin streamlines your workflow by enabling efficient interaction with R
+directly from your editor, reducing context switching.
 
 ==============================================================================
+INSTALLATION
+1. **Using Native Vim Packages** (Vim 8+):
+   Place the plugin in:
+==============================================================================
+USAGE
+Open an R, R Markdown, or Quarto file. The plugin’s mappings become available
+if `FileType` is `r`, `rmd`, or `qmd`.
 
-INSTALLATION                                            *rgt-R-installation*
+- Start an R terminal in Vim:
 
-Use your preferred plugin manager to install `rgt-R.vim`. Example using vim-plug:
+	•	Submit a visual selection to R (Visual mode):
+Select a block of code visually and press <CR>. If an R terminal is open,
+it sends the selection. Otherwise, a message appears.
+	•	Navigate R Markdown chunks:
+Use <localleader>l, <localleader>;, <localleader>k, and <localleader>j
+to select and move between R Markdown code chunks, making it easy to run code
+chunk-by-chunk.
+	•	Perform actions on <cword>:
+With the cursor over a word (e.g., an R object), use <localleader>d, <localleader>h,
+and similar mappings to run R functions like dim(), head(), str() on that object.
+	•	Render R Markdown file to PDF:
+Use ZT in Normal mode to render the current .Rmd file using rmarkdown::render().
+==============================================================================
+MAPPINGS
+All mappings apply to buffers of type r, rmd, and qmd only.
 
-    Plug 'username/rgt-R.vim'
+NORMAL MODE:
+	•	<CR>                Submit current line to R, move down one line
+	•	<localleader>r      Start an R terminal (vertical split)
+	•	<localleader>c      Send Ctrl-C to interrupt R execution
+	•	<localleader>q      Send ‘Q’ to quit R debug browser
+	•	<localleader>l      Select and send the current R Markdown chunk
+	•	<localleader>;      Select and send current R Markdown chunk, move to next
+	•	<localleader>k      Move to previous R Markdown chunk
+	•	<localleader>j      Move to next R Markdown chunk
+
+Perform actions on the word under cursor:
+	•	<localleader>d      dim(word)
+	•	<localleader>h      head(word)
+	•	<localleader>s      str(word)
+	•	<localleader>p      print(word)
+	•	<localleader>n      names(word)
+	•	<localleader>f      length(word)
+	•	<localleader>g      glimpse(word) (requires the dplyr or tibble package)
+
+Other:
+	•	ZT                  Render current Rmd file to PDF via rmarkdown::render()
+
+VISUAL MODE:
+	•	<CR>                Submit selected text to R if terminal is available
+
+For embedded code submission with commented output:
+	•	<localleader>z in Visual mode:
+Submit selection, capture output to a temporary file, and insert commented output.
 
 ==============================================================================
+COMMANDS & FUNCTIONS
+These functions are mostly internal, but you can call them if needed:
+	•	SubmitLine()        Submit current line to R terminal.
+	•	Sel()               Select visually selected code into a temporary file.
+	•	Submit()            Submit the previously selected code file to R.
+	•	SubmitEmbed()       Submit and capture output into a temporary file (temp.txt).
+	•	Rd()                Read the captured output and insert it as commented lines.
+	•	SelectChunk()       Select current R Markdown chunk.
+	•	MoveNextChunk()     Move to next R Markdown chunk.
+	•	MovePrevChunk()     Move to previous R Markdown chunk.
+	•	Brk()               Send Ctrl-C to break R execution.
+	•	BrowserBrk()        Send ‘Q’ to exit R’s debug browser.
+	•	Raction()           Perform R functions like head(), str() on <cword>.
 
-vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
+==============================================================================
+REQUIREMENTS
+	•	Vim 8 or higher (or Neovim) with :terminal support.
+	•	R installed and accessible on your PATH.
+	•	The rmarkdown R package if you plan to render .Rmd files to PDF.
+
+==============================================================================
+TROUBLESHOOTING
+	•	If :help rgt-R doesn’t work, run :helptags on the doc directory.
+	•	Ensure an R terminal is open before sending code.
+	•	If chunk navigation doesn’t work, ensure your file has valid R Markdown code blocks:
