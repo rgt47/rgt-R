@@ -1,0 +1,78 @@
+
+# Vimscript Functions Documentation
+
+This file provides detailed documentation for the Vimscript functions defined in the provided script.
+
+## Function: SelectChunk
+**Description**: 
+Selects a markdown chunk (enclosed within triple backticks) by searching backward and entering visual mode.
+- Searches for the opening backticks (` ```{ `).
+- Enters visual mode and selects until the closing backticks.
+
+**Errors**:
+- Outputs a message if no matching markdown chunk is found.
+
+---
+
+## Function: MoveNextChunk
+**Description**:
+Moves the cursor to the start of the next markdown chunk in the document.
+- Searches for the opening backticks (` ```{ `) forward.
+
+**Errors**:
+- Outputs a message if no further markdown chunks are found.
+
+---
+
+## Function: MovePrevChunk
+**Description**:
+Moves the cursor to the start of the previous markdown chunk in the document.
+- Searches for the opening backticks (` ```{ `) backward.
+
+**Errors**:
+- Outputs a message if no previous markdown chunks are found.
+
+---
+
+## Function: Raction(action)
+**Description**:
+Executes a given action on the word under the cursor and sends the result to the terminal.
+- Fetches the word under the cursor.
+- Constructs a command using the provided `action` and the word.
+- Sends the command to the active terminal.
+
+**Parameters**:
+- `action` (string): The action to apply to the word.
+
+---
+
+## Function: SubmitLine
+**Description**:
+Sends the current line of the document to the active terminal.
+- Fetches the content of the current line.
+- Sends it as a command to the terminal.
+
+---
+
+## Function: GetVisualSelection(mode)
+**Description**:
+Retrieves the text currently selected in visual mode and returns it as a string.
+- Supports character-wise (`'v'`) and line-wise (`'V'`) visual modes.
+- Trims the text for character-wise selection.
+
+**Parameters**:
+- `mode` (string): The visual mode (`'v'` for character-wise, `'V'` for line-wise).
+
+**Errors**:
+- Outputs a message if an unsupported mode is detected.
+
+**Returns**:
+- A string containing the selected text.
+
+---
+
+## General Notes
+1. These functions are designed for markdown navigation and terminal interactions.
+2. Error messages ensure graceful handling of edge cases.
+3. Functions avoid modifying registers to maintain user workflow integrity.
+
