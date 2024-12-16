@@ -195,9 +195,6 @@ augroup RMarkdownMappings
     " Render current Rmd to PDF
     autocmd FileType r,rmd,qmd nnoremap <buffer> ZT :!R --quiet -e 'rmarkdown::render("<C-r>%", output_format="pdf_document")'<CR>
 
-    " Terminal mode quit mappings
-    " autocmd FileType r,rmd,qmd tnoremap <buffer> ZQ q('no')<CR>
-     " autocmd FileType r,rmd,qmd tnoremap <buffer> ZZ <C-d>
 
     " Perform actions on the word under cursor
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>d :call Raction("dim")<CR>
@@ -209,10 +206,10 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")<CR>
 
 " Normal mode mapping for <localleader>e
-nnoremap <silent> <localleader>e :call AddPipeAndNewLine()<CR>
+nnoremap <silent> <C-e>  :call AddPipeAndNewLine()<CR>
 
 " Insert mode mapping for <localleader>e
-inoremap <silent> <localleader>e <Esc>:call AddPipeAndNewLine()<CR>i
+inoremap <silent> <C-e> <Esc>:call AddPipeAndNewLine()<CR>i
 
 function! AddPipeAndNewLine()
     " Append '|>' to the end of the current line
