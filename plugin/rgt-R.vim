@@ -45,10 +45,21 @@ endfunction
 
 " Select a markdown chunk by searching for backticks and entering visual mode
 function! SelectChunk() abort
-    if search('```{', 'bW')
-        normal! jV
-        if !search('```', 'W')
+    " Search backwards for the opening of an R Markdown chunk
+    if search('^```{', 'bW')
+        " Move to the next line (start of the chunk content)
+        normal! j
+
+        " Start visual line mode
+        normal! V
+
+        " Search forwards for the closing backticks
+        if search('^```$', 'W')
+            " Move up one line to exclude the closing backticks
+            normal! k
+        else
             echo "No matching closing backticks found."
+            normal! <Esc> " Exit visual mode if no match found
         endif
     else
         echo "No R Markdown chunks found above."
