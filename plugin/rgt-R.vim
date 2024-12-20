@@ -78,10 +78,12 @@ endfunction
 
 " Move to the previous markdown chunk
 function! MovePrevChunk() abort
-    if search('```{', 'bW')
+    " Search backwards for the previous chunk opening delimiter (``` with optional text)
+    if search('^\s*```.*', 'bW')
+        " Move the cursor to the next line (start of the chunk content)
         normal! j
     else
-        echo "No previous chunks found."
+        echo "No previous chunk found."
     endif
     noh
 endfunction
