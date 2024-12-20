@@ -239,7 +239,7 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>l :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR><CR>
 
     " Select a chunk, send it to R, move to next chunk, center vertically
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>; :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>; :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz:noh<CR>
 
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>' :call CollectAndSubmitPreviousChunks()<CR>
     " Move to previous/next chunk
