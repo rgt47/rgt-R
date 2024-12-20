@@ -147,10 +147,9 @@ function! Rd() abort
     execute 'r !cat temp_commented.txt'
 endfunction
 "
-" Collect all code from chunks prior to the current chunk
 function! CollectPreviousChunks() abort
-    " Define the chunk delimiter as triple backticks
-    let l:chunk_delimiter = '^\s*```\s*$'
+    " Define the chunk delimiter as lines starting with ```
+    let l:chunk_delimiter = '^\s*```$begin:math:text$.*$end:math:text$\?$'
 
     " Get the current line number
     let l:current_line = line('.')
