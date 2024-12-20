@@ -79,15 +79,15 @@ endfunction
 
 function! MovePrevChunk() abort
     " Define patterns for chunk delimiters
-    let l:opening_delimiter = '^\s*```.*'
+    let l:opening_delimiter = '^\s*```{.*'
     let l:closing_delimiter = '^\s*```$'
 
-    " Move up one line to skip the current chunk's opening delimiter or closing delimiter
+    " Move up to skip any lines within the current chunk, including delimiters
     while line('.') > 1 && (getline('.') =~ l:opening_delimiter || getline('.') =~ l:closing_delimiter)
         execute "normal! k"
     endwhile
 
-    " Search backwards for the previous chunk opening delimiter
+    " Search backwards for the previous chunk's opening delimiter
     let l:found = search(l:opening_delimiter, 'bW')
 
     if l:found > 0
@@ -163,27 +163,41 @@ function! Rd() abort
 endfunction
 "
 function! CollectPreviousChunks() abort
-    " Define the chunk delimiter as lines starting with ``` and optional text
-    let l:chunk_delimiter = '^\s*```.*'
+    " Define the chunk delimiter as lines starting with ```
+    let l:chunk_start_delimiter = '^\s*```{.*'
+    let l:chunk_end_delimiter = '^\s*```$'
 
     " Get the current line number
     let l:current_line = line('.')
 
-    " Initialize variables to collect lines
-    let l:all_lines = []
-    let l:start_line = 1
+    " Initialize variables
+    let l:all_chunk_lines = []
+    let l:inside_chunk = 0
 
     " Loop through lines up to the current line
     for l:line in range(1, l:current_line)
-        if match(getline(l:line), l:chunk_delimiter) != -1
-            " When finding a delimiter, add lines from the previous chunk
-            let l:all_lines += getline(l:start_line, l:line - 1)
-            let l:start_line = l:line + 1
+        let l:current_content = getline(l:line)
+        
+        " Check if the line is a chunk start
+        if l:current_content =~ l:chunk_start_delimiter
+            let l:inside_chunk = 1
+            continue
+        endif
+        
+        " Check if the line is a chunk end
+        if l:current_content =~ l:chunk_end_delimiter
+            let l:inside_chunk = 0
+            continue
+        endif
+
+        " If inside a chunk, collect the line
+        if l:inside_chunk
+            call add(l:all_chunk_lines, l:current_content)
         endif
     endfor
 
     " Return the collected lines joined as a single string
-    return join(l:all_lines, "\n")
+    return join(l:all_chunk_lines, "\n")
 endfunction
 "------------------------------------------------------------------------------
 " Mapping to Collect and Submit All Previous Chunks
