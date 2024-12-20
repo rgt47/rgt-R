@@ -215,6 +215,7 @@ augroup RMarkdownMappings
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>n :call Raction("names")<CR>
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f :call Raction("length")<CR>
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")<CR>
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>b :call Raction("dt")<CR>
 
 " Normal mode mapping for <localleader>e
 nnoremap <silent> <C-e>  :call AddPipeAndNewLine()<CR>
