@@ -76,15 +76,30 @@ function! MoveNextChunk() abort
     noh
 endfunction
 
-" Move to the previous markdown chunk
 function! MovePrevChunk() abort
-    " Search backwards for the previous chunk opening delimiter (``` with optional text)
-    if search('^\s*```.*', 'bW')
-        " Move the cursor to the next line (start of the chunk content)
-        normal! j
+    " Define the chunk opening delimiter
+    let l:delimiter = '^\s*```.*'
+
+    " Save the current cursor position
+    let l:current_line = line('.')
+
+    " Search backwards for the previous chunk opening delimiter
+    let l:found = search(l:delimiter, 'bW')
+
+    if l:found > 0
+        " Ensure the cursor moves to the line after the delimiter
+        if l:found < l:current_line
+            " If the delimiter is found, move to the next line (start of chunk content)
+            execute l:found + 1 . "normal! 0"
+        else
+            " If the cursor is already at the chunk content, move directly
+            normal! 0
+        endif
     else
         echo "No previous chunk found."
     endif
+
+    " Clear search highlighting
     noh
 endfunction
 
