@@ -146,6 +146,31 @@ function! Rd() abort
     !sed 's/^/# /g' temp.txt > temp_commented.txt
     execute 'r !cat temp_commented.txt'
 endfunction
+"
+" Collect all code from chunks prior to the current chunk
+function! CollectPreviousChunks() abort
+    " Define the chunk delimiter as triple backticks
+    let l:chunk_delimiter = '^\s*```\s*$'
+
+    " Get the current line number
+    let l:current_line = line('.')
+
+    " Initialize variables to collect lines
+    let l:all_lines = []
+    let l:start_line = 1
+
+    " Loop through lines up to the current line
+    for l:line in range(1, l:current_line)
+        if match(getline(l:line), l:chunk_delimiter) != -1
+            " When finding a delimiter, add lines from the previous chunk
+            let l:all_lines += getline(l:start_line, l:line - 1)
+            let l:start_line = l:line + 1
+        endif
+    endfor
+
+    " Return the collected lines joined as a single string
+    return join(l:all_lines, "\n")
+endfunction
 "------------------------------------------------------------------------------
 " Mapping to Collect and Submit All Previous Chunks
 "------------------------------------------------------------------------------
