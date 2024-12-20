@@ -81,17 +81,10 @@ function! MovePrevChunk() abort
     let l:opening_delimiter = '^\s*```.*'
     let l:closing_delimiter = '^\s*```$'
 
-    " Move up one line to skip the current chunk's opening delimiter
-    if line('.') > 1
+    " Move up one line to skip the current chunk's opening delimiter or closing delimiter
+    while line('.') > 1 && (getline('.') =~ l:opening_delimiter || getline('.') =~ l:closing_delimiter)
         execute "normal! k"
-    endif
-
-    " Check if the current line is a closing delimiter, and skip it
-    if getline('.') =~ l:closing_delimiter
-        if line('.') > 1
-            execute "normal! k"
-        endif
-    endif
+    endwhile
 
     " Search backwards for the previous chunk opening delimiter
     let l:found = search(l:opening_delimiter, 'bW')
