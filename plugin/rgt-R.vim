@@ -76,6 +76,7 @@ function! MoveNextChunk() abort
     noh
 endfunction
 
+
 function! MovePrevChunk() abort
     " Define patterns for chunk delimiters
     let l:opening_delimiter = '^\s*```.*'
