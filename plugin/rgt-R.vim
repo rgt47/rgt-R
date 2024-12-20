@@ -77,24 +77,28 @@ function! MoveNextChunk() abort
 endfunction
 
 function! MovePrevChunk() abort
-    " Define the chunk opening delimiter
-    let l:delimiter = '^\s*```.*'
+    " Define patterns for chunk delimiters
+    let l:opening_delimiter = '^\s*```.*'
+    let l:closing_delimiter = '^\s*```$'
 
-    " Save the current cursor position
-    let l:current_line = line('.')
+    " Move up one line to skip the current chunk's opening delimiter
+    if line('.') > 1
+        execute "normal! k"
+    endif
+
+    " Check if the current line is a closing delimiter, and skip it
+    if getline('.') =~ l:closing_delimiter
+        if line('.') > 1
+            execute "normal! k"
+        endif
+    endif
 
     " Search backwards for the previous chunk opening delimiter
-    let l:found = search(l:delimiter, 'bW')
+    let l:found = search(l:opening_delimiter, 'bW')
 
     if l:found > 0
-        " Ensure the cursor moves to the line after the delimiter
-        if l:found < l:current_line
-            " If the delimiter is found, move to the next line (start of chunk content)
-            execute l:found + 1 . "normal! 0"
-        else
-            " If the cursor is already at the chunk content, move directly
-            normal! 0
-        endif
+        " Move to the line after the found delimiter (start of chunk content)
+        execute l:found + 1 . "normal! 0"
     else
         echo "No previous chunk found."
     endif
