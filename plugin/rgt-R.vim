@@ -150,8 +150,8 @@ function! Rd() abort
 endfunction
 "
 function! CollectPreviousChunks() abort
-    " Define the chunk delimiter as lines starting with ```
-    let l:chunk_delimiter = '^\s*```$begin:math:text$.*$end:math:text$\?$'
+    " Define the chunk delimiter as lines starting with ``` and optional text
+    let l:chunk_delimiter = '^\s*```.*'
 
     " Get the current line number
     let l:current_line = line('.')
