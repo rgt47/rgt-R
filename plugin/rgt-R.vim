@@ -146,6 +146,25 @@ function! Rd() abort
     !sed 's/^/# /g' temp.txt > temp_commented.txt
     execute 'r !cat temp_commented.txt'
 endfunction
+"------------------------------------------------------------------------------
+" Mapping to Collect and Submit All Previous Chunks
+"------------------------------------------------------------------------------
+
+" Collect and submit all previous chunks to R
+function! CollectAndSubmitPreviousChunks() abort
+    " Collect all previous chunks
+    let l:previous_chunks = CollectPreviousChunks()
+
+    " Check if there is anything to submit
+    if empty(l:previous_chunks)
+        echo "No previous chunks to submit."
+        return
+    endif
+
+    " Submit to R using the existing send_to_r function
+    call s:send_to_r(l:previous_chunks . "\n")
+    echo "Submitted all previous chunks to R."
+endfunction
 
 "------------------------------------------------------------------------------
 " Check and Submit Functions
@@ -196,6 +215,7 @@ augroup RMarkdownMappings
     " Select a chunk, send it to R, move to next chunk, center vertically
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>; :call SelectChunk()<CR> \| :call Sel() \| :call Submit()<CR> \| /```{<CR>jzz
 
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>' :call CollectAndSubmitPreviousChunks()<CR>
     " Move to previous/next chunk
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>k :call MovePrevChunk()<CR>
     autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>j :call MoveNextChunk()<CR>
