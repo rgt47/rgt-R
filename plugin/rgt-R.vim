@@ -218,7 +218,65 @@ function! CollectAndSubmitPreviousChunks() abort
     call s:send_to_r(l:previous_chunks . "\n")
     echo "Submitted all previous chunks to R."
 endfunction
+"
+" Function to create a new R terminal
+function! s:OpenRTerminal() abort
+    " Check if R is installed
+    if !executable('R')
+        call s:Error('R is not installed or not in PATH')
+        return
+    endif
 
+    " Check if a terminal with R is already running
+    let terms = term_list()
+    for term in terms
+        if match(term_getline(term, 1), 'R version') != -1
+            call s:Error('R terminal is already running')
+            " Switch to the existing R terminal
+            call win_gotoid(win_findbuf(term)[0])
+            return
+        endif
+    endfor
+
+    " Save current window dimensions
+    let current_window = win_getid()
+
+    " Open vertical split with customizable width
+    let width = get(g:, 'zzvim_r_terminal_width', 80)
+    execute 'vertical rightbelow ' . width . 'split'
+
+    " Start R with common startup flags
+    let r_cmd = get(g:, 'zzvim_r_command', 'R --no-save --quiet')
+    execute 'terminal ' . r_cmd
+
+    " Set terminal window options
+    setlocal nobuflisted
+    setlocal nonumber
+    setlocal norelativenumber
+    setlocal signcolumn=no
+    let t:is_r_term = 1
+
+    " Return to previous window
+    call win_gotoid(current_window)
+endfunction
+
+" Add to plugin's autocmd group
+if !g:zzvim_r_disable_mappings
+    augroup zzvim_RMarkdown
+        " Add new mapping to existing autocmd group
+        autocmd FileType r,rmd,qmd nnoremap <buffer> <silent> <localleader>r 
+            \ :call <SID>OpenRTerminal()<CR>
+    augroup END
+endif
+
+" Add configuration variables
+if !exists('g:zzvim_r_terminal_width')
+    let g:zzvim_r_terminal_width = 80
+endif
+
+if !exists('g:zzvim_r_command')
+    let g:zzvim_r_command = 'R --no-save --quiet'
+endif
 "------------------------------------------------------------------------------
 " Check and Submit Functions
 "------------------------------------------------------------------------------
