@@ -1,0 +1,546 @@
+
+==============================================================================
+4. Use                                                            *Nvim-R-use*
+
+By default, Nvim-R will run R in a built-in terminal emulator, but you can
+change this behavior (see |R_external_term|).
+
+
+------------------------------------------------------------------------------
+4.1. Key bindings
+
+Note: The <LocalLeader> is '\' by default.
+
+To use the plugin, open a .R, .Rnw, .Rd, .Rmd, .Rrst, or .qmd file with Vim
+and type <LocalLeader>rf. Then, you will be able to use the plugin key
+bindings to send commands to R.
+
+This plugin has many key bindings, which correspond with menu entries. In the
+list below, the backslash represents the <LocalLeader>. Not all menu items and
+key bindings are enabled in all file types supported by the plugin (r, rnoweb,
+rhelp, rrst, rmd, and quarto).
+
+Menu entry                                Default shortcut
+Start/Close
+  . Start R (default)                                  \rf
+  . Start R (custom)                                   \rc
+  --------------------------------------------------------
+  . Close R (no save)                                  \rq
+  . Stop (interrupt) R                                 :RStop
+-----------------------------------------------------------
+
+Send
+  . File                                               \aa
+  . File (echo)                                        \ae
+  . File (open .Rout)                                  \ao
+  --------------------------------------------------------
+  . Block (cur)                                        \bb
+  . Block (cur, echo)                                  \be
+  . Block (cur, down)                                  \bd
+  . Block (cur, echo and down)                         \ba
+  --------------------------------------------------------
+  . Chunk (cur)                                        \cc
+  . Chunk (cur, echo)                                  \ce
+  . Chunk (cur, down)                                  \cd
+  . Chunk (cur, echo and down)                         \ca
+  . Chunk (from first to here)                         \ch
+  --------------------------------------------------------
+  . Function (cur)                                     \ff
+  . Function (cur, echo)                               \fe
+  . Function (cur and down)                            \fd
+  . Function (cur, echo and down)                      \fa
+  --------------------------------------------------------
+  . Selection                                          \ss
+  . Selection (echo)                                   \se
+  . Selection (and down)                               \sd
+  . Selection (echo and down)                          \sa
+  . Selection (evaluate and insert output in new tab)  \so
+  --------------------------------------------------------
+  . Send motion region                                 \m{motion}
+  --------------------------------------------------------
+  . Paragraph                                          \pp
+  . Paragraph (echo)                                   \pe
+  . Paragraph (and down)                               \pd
+  . Paragraph (echo and down)                          \pa
+  --------------------------------------------------------
+  . Line                                                \l
+  . Line (and down)                                     \d
+  . Line (and new one)                                  \q
+  . Left part of line (cur)                       \r<Left>
+  . Right part of line (cur)                     \r<Right>
+  . Line (evaluate and insert the output as comment)    \o
+  . All lines above the current one                    \su
+-----------------------------------------------------------
+
+Command
+  . List space                                         \rl
+  . Clear console                                      \rr
+  . Remove objects and clear console                   \rm
+  --------------------------------------------------------
+  . Print (cur)                                        \rp
+  . Names (cur)                                        \rn
+  . Structure (cur)                                    \rt
+  . View data.frame (cur) in new tab                   \rv
+  . View data.frame (cur) in horizontal split          \vs
+  . View data.frame (cur) in vertical split            \vv
+  . View head(data.frame) (cur) in horizontal split    \vh
+  . Run dput(cur) and show output in new tab           \td
+  --------------------------------------------------------
+  . Arguments (cur)                                    \ra
+  . Example (cur)                                      \re
+  . Help (cur)                                         \rh
+  --------------------------------------------------------
+  . Summary (cur)                                      \rs
+  . Plot (cur)                                         \rg
+  . Plot and summary (cur)                             \rb
+  --------------------------------------------------------
+  . Set working directory (cur file path)              \rd
+  --------------------------------------------------------
+  . Sweave (cur file)                                  \sw
+  . Sweave and PDF (cur file)                          \sp
+  . Sweave, BibTeX and PDF (cur file) (Linux/Unix)     \sb
+  --------------------------------------------------------
+  . Knit (cur file)                                    \kn
+  . Knit, BibTeX and PDF (cur file) (Linux/Unix)       \kb
+  . Knit and PDF (cur file)                            \kp
+  . Knit and Beamer PDF (cur file)                     \kl
+  . Knit and HTML (cur file, verbose)                  \kh
+  . Knit and ODT (cur file)                            \ko
+  . Knit and Word Document (cur file)                  \kw
+  . Markdown render (cur file)                         \kr
+  . Markdown render [all in YAML] (cur file)           \ka
+  . Spin (cur file) (only .R)                          \ks
+  --------------------------------------------------------
+  . Quarto render (cur file)                           \qr
+  . Quarto preview (cur file)                          \qp
+  . Quarto stop preview (all files)                    \qs
+  --------------------------------------------------------
+  . Open attachment of reference (Rmd, Rnoweb)         \oa
+  . Open PDF (cur file)                                \op
+  . Search forward (SyncTeX)                           \gp
+  . Go to LaTeX (SyncTeX)                              \gt
+  --------------------------------------------------------
+  . Debug (function)                                   \bg
+  . Undebug (function)                                 \ud
+  --------------------------------------------------------
+  . Build tags file (cur dir)                  :RBuildTags
+-----------------------------------------------------------
+
+Edit
+  . Insert "<-"                                          _
+  . Complete object name                     CTRL-X CTRL-O
+  --------------------------------------------------------
+  . Go (next R chunk)                                  \gn
+  . Go (previous R chunk)                              \gN
+-----------------------------------------------------------
+
+Object Browser
+  . Open/Close                                         \ro
+  . Expand (all lists)                                 \r=
+  . Collapse (all lists)                               \r-
+  . Toggle (cur)                                     Enter
+-----------------------------------------------------------
+
+Help (plugin)
+Help (R)                                            :Rhelp
+-----------------------------------------------------------
+
+Please see |Nvim-R-key-bindings| to learn how to customize the key bindings
+without editing the plugin directly.
+
+The plugin commands that send code to R Console are the most commonly used. If
+the code to be sent to R has a single line it is sent directly to R Console.
+If it has more than one line (a selection of lines, a block of lines between
+two marks, a paragraph etc) the lines are written to a file and the plugin
+sends to R the command to source the file. To send to R Console the line
+currently under the cursor you should type <LocalLeader>d. If you want to see
+what lines are being sourced when sending a selection of lines, you can use
+either <LocalLeader>se or <LocalLeader>sa instead of <LocalLeader>ss. The
+<LocalLeader>m{motion} command sends the lines from the motion command that
+follows <LocalLeader>m, e.g. <LocalLeader>m} (from the current line to the end
+of paragraph) or <LocalLeader>m3j (the next 3 lines including the current
+line).
+
+If the cursor is between manually inserted marks, the plugin will send the
+lines between them to R if you press <LocalLeader>bb. If the cursor is above
+the first mark, the plugin will send from the beginning of the file to the
+mark. If the cursor is below the last mark, the plugin will send from the mark
+to the end of the file. The mark above the cursor is included and the mark
+below is excluded from the block to be sent to R. To create a mark, press
+m<letter> in Normal mode (see |mark|). For example, consider the following
+code (with line numbers):
+>
+   1
+   2  x <- 3
+   3  y <- 2
+   4
+   5  z <- x + y
+   6
+
+In Normal mode, go to line 1 and press `ma`; go to line 6 and press `mb`; go
+to line 4 and press `<LocalLeader>bb` to send lines 1 to 5 to R. Normally, Vim
+marks are not visible, but there are plugins that highlight them.
+
+You can also use the command `:RSend` to type and, then, send a line of code
+to R. If you use this command frequently, you may consider creating a map for
+it in your |vimrc|. For example:
+>vim
+   nmap <LocalLeader>: :RSend
+<
+Observe that there is an empty space after `:RSend`, so you do not have to
+type it.
+
+The command <LocalLeader>o runs in the background the R command `print(line)`,
+where `line` is the line under the cursor, and adds the output as commented
+lines to the source code.
+
+If the cursor is over the header of an R chunk with the `child` option (from
+Rnoweb, RMarkdown, Quarto or RreStructuredText document), and you use one of
+the commands that send a single line of code to R, then the plugin will send
+to R the command to knit the child document.
+
+After the commands that send, sweave or knit the current buffer, Vim will
+save the current buffer if it has any pending changes before performing the
+tasks. After <LocalLeader>ao, Vim will run "R CMD BATCH --no-restore
+--no-save" on the current file and show the resulting .Rout file in a new tab.
+Please see |R_routnotab| if you prefer that the file is open in a new split
+window. Note: The command <LocalLeader>ao, silently writes the current buffer
+to its file if it was modified and deletes the .Rout file if it exists.
+
+R syntax uses " <- " to assign values to variables which is inconvenient to
+type. In insert mode, typing a single underscore, "_", will write " <- ",
+unless you are typing inside a string. The replacement will always happen if
+syntax highlighting is off (see |:syn-on| and |:syn-off|). If necessary, it is
+possible to insert an actual underscore into your file by typing a second
+underscore. This behavior is similar to the EMACS ESS mode some users may be
+familiar with and is enabled by default. You have to change the value of
+|R_assign| to disable underscore replacement.
+
+When you press <LocalLeader>rh, the plugin shows the help for the function
+under the cursor. The plugin also checks the class of the first object passed
+as argument to the function to try to figure out whether the function is a
+generic one and whether it is more appropriate to show a specific method. The
+same procedure is followed with <LocalLeader>rp, that is, while printing an
+object. For example, if you run the code below and, then, press
+<LocalLeader>rh and <LocalLeader>rp over the two occurrences of `summary`, the
+plugin will show different help documents and print different function methods
+in each case:
+>r
+   y <- rnorm(100)
+   x <- rnorm(100)
+   m <- lm(y ~ x)
+   summary(x)
+   summary(m)
+<
+Nvim-R will not check the class of the first object if the `=` operator is
+present. For example, in the two cases below you would get the generic help
+for `summary`:
+>r
+   summary(object = x)
+   summary(object = m)
+<
+To get help on an R topic, you can also type in Vim (Normal mode):
+>vim
+   :Rhelp topic
+<
+The command may be abbreviated to `:Rh` and you can either press <Tab> to
+trigger the autocompletion of R objects names or hit CTRL-D to list the
+possible completions (see |cmdline-completion| for details on the various ways
+of getting command-line completion). The list of objects used for completion
+is the same available for omni completion (see |R_start_libs|). You may close
+the R documentation buffer by simply pressing `q`.
+
+The command <LocalLeader>td will run `dput()` with the object under cursor as
+argument and insert the output in a new tab. The command <LocalLeader>rv will
+also run `dput()` with the object under cursor as argument and show the output
+in a new tab, while <LocalLeader>vs will show it in a horizontal split, and
+<LocalLeader>vv will show it in a vertical split. However, if the object under
+the cursor is a data.frame or a matrix, instead of displaying the output of
+`dput()`, the commands will save the data.frame or matrix in a text file with
+values separated by tab characters and display this file. The command
+<LocalLeader>vh will show the `head()` of the data.frame or matrix in a
+horizontal split that opens above the current window. This behavior can be
+customized, and you can configure Nvim-R to call an external application to
+display the data.frame or matrix (see |Nvim-R-df-view|). All files involved in
+these operations are created in Nvim-R's temporary directory and deleted when
+R quits.
+
+You can source all .R files in a directory with the Normal mode command
+`:RSourceDir`, which accepts an optional argument (the directory to be
+sourced).
+
+In Normal mode `:RStop` sends to R SIGINT which is the same signal sent when
+you press CTRL-C into R's Console. If R does not quit normally, you can kill
+it with the `:RKill` command.
+
+
+------------------------------------------------------------------------------
+                                                                    *:Rinsert*
+                                                                    *:Rformat*
+The command `:Rinsert` <cmd> inserts one or more lines with the output of the
+R command sent to R. By using this command we can avoid the need of copying
+and pasting the output R from its console to Vim. For example, to insert
+the output of `dput(levels(var))`, where `var` is a factor vector, we could do
+in Vim:
+>vim
+   :Rinsert dput(levels(var))
+<
+The output inserted by `:Rinsert` is limited to 5012 characters.
+
+The command `:Rformat` calls the function `style_text()` (if the package
+`styler` is installed) or the function `tidy_source()` (if the package
+`formatR` is installed) to format either the entire buffer or the selected
+lines. The command only works if R is running. If `style_text()` is used the
+value of 'shiftwidth' is passed as `indent_by`, and if `tidy_source()` is
+used, the value of the `width.cutoff` argument is set to the buffer's
+'textwidth' if it is not outside the range 20-180.
+
+Se R help on `tidy_source` for details on how to control the function
+behavior.
+
+
+------------------------------------------------------------------------------
+4.2. Editing Rnoweb files
+
+In Rnoweb files (.Rnw), when the cursor is over the `@` character, which
+finishes an R chunk, the sending of all commands to R is suspended and the
+shortcut to send the current line makes the cursor to jump to the next chunk.
+While editing Rnoweb files, the following commands are available in Normal
+mode:
+
+   [count]<LocalLeader>gn : go to the next chunk of R code
+   [count]<LocalLeader>gN : go to the previous chunk of R code
+
+You can also press <LocalLeader>gt to go the corresponding line in the
+generated .tex file (if SyncTeX is enabled).
+
+The commands <LocalLeader>cc, ce, cd and ca send the current chunk of R code
+to R Console. The command <LocalLeader>ch sends the R code from the first
+chunk up to the current line.
+
+The commands <LocalLeader>kn builds the .tex file from the Rnoweb one using
+the knitr package and <LocalLeader>kp compiles the pdf; for Sweave, the
+commands are, respectively <LocalLeader>sw and <LocalLeader>sp. You can jump
+from the Rnoweb file to the PDF (forward search) with the command
+<LocalLeader>gp. The command to jump from a specific location in the PDF to
+the corresponding line in the Rnoweb (backward search) is specific to each pdf
+viewer:
+
+   Zathura: <C-LeftMouse>
+   Evince:  <C-LeftMouse>
+   Okular:  <S-LeftMouse>
+   Skim:    <S-Cmd-Click>
+   Sumatra: <Double-click>
+
+In any case, the pdf viewer must be started by the Nvim-R plugin. See
+|Nvim-R-SyncTeX| for details.
+
+
+------------------------------------------------------------------------------
+4.3. Omni completion
+
+If `cmp-nvim-r` (a source for `nvim-cmp`) is installed, Neovim can
+automatically complete the names of R objects as you type them (but
+conventional Vim omni completion does not work if `cmp-nvim-r` is installed).
+
+Nvim-R does not complete the names of all functions of all installed packages
+(see |R_start_libs|).
+
+For both `library()` and `require()`, when completing the first argument, the
+popup list shows the names of installed packages.
+
+Vim uses one file to store the names of .GlobalEnv objects and a list of files
+for all other objects. The .GlobalEnv list is stored in the `$NVIMR_TMPDIR`
+directory and is deleted when you quit Vim. The other files are stored in the
+`$NVIMR_COMPLDIR` directory, are automatically updated and remain available
+unless you manually delete them.
+
+
+------------------------------------------------------------------------------
+4.4. The Object Browser
+
+You have to use <LocalLeader>ro to either open or close the Object Browser on
+the same tab page. If it is already open on another tab page, it will be
+closed there and opened again in the current one. The Object Browser has two
+views: .GlobalEnv and Libraries. If you press <Enter> on the first line of the
+Object Browser it will toggle the view between the objects in .GlobalEnv and
+the currently loaded libraries.
+
+In the .GlobalEnv view, if a data.frame column has the attribute "label", it
+will also be displayed. For instance, the code below would make the Object
+Browser display the variable labels of an imported SPSS dataset:
+>r
+   library(foreign)
+   d <- read.spss("/path/to/spss/dataset.sav", to.data.frame = TRUE)
+   vlabs <- attr(d, "variable.labels")
+   for(n in names(vlabs))
+       attr(d[[n]], "label") <- vlabs[[n]]
+<
+In the Object Browser window, while in Normal mode, you can either press
+<Enter> or double click (GVim only) over a data.frame or list to show/hide its
+elements (not if viewing the content of loaded libraries). If you are running
+R in an environment where the string UTF-8 is part of either LC_MESSAGES or
+LC_ALL variables, Unicode line drawing characters will be used to draw lines
+in the Object Browser. This is the case of most Linux distributions.
+
+In the Libraries view, you can either double click or press <Enter> on a
+library name to see its objects. In the Object Browser, the libraries have the
+color defined by the PreProc highlighting group. The other objects have
+their colors defined by the return value of some R functions. Each line in the
+table below shows a highlighting group and the corresponding type of R object:
+
+	 PreProc	libraries
+	 Include	environment
+	 Number		numeric
+	 String		character
+	 Special	factor
+	 Boolean	logical
+	 Type		data.frame
+	 StorageClass	list
+	 Structure	s4
+	 Function	function
+	 Statement	control flow (for, while, break, etc)
+	 Comment	promise (lazy load object)
+
+One limitation of the Object Browser is that objects made available by the
+command `data()` are only links to the actual objects (promises of lazily
+loading the object when needed) and their real classes are not recognized in
+the GlobalEnv view. The same problem happens when the `knitr` option
+`cache.lazy=TRUE`. However, if you press <Enter> over the name of the object
+in the Object Browser, it will be actually loaded by the command (ran in the
+background):
+>r
+   obj <- obj
+<
+Notes:
+
+  - If either the Object Browser is open or omni completion is enabled, the
+    list of .GlobalEnv objects will be automatically updated by R after each
+    successful evaluation of command. This may slowdown R if its workspace has
+    too many objects, data.frames with too many columns or lists with too many
+    elements (see |R_set_omnifunc|).
+
+  - Names of objects are stupidly truncated if they occupy more than 62 bytes.
+    This means that Unicode sequences might be split and become invalid.
+
+  - Active bindings are not included in the list of objects for omni
+    completion. Also, they are not included in the Object Browser.
+
+
+------------------------------------------------------------------------------
+4.5. Build a tags file to jump to function definitions            *RBuildTags*
+
+Vim can jump to functions defined in other files if you press CTRL-] over the
+name of a function, but it needs a tags file to be able to find the function
+definition (see |tags-and-searches|). The command `:RBuildTags` calls the R
+functions `rtags()` and `etags2ctags` to build the tags file for the R scripts
+in the current directory.
+
+
+------------------------------------------------------------------------------
+4.6. Debugging R functions (Unix only)                     *debug-R-functions*
+
+The Nvim-R-Plugin has limited debugging facilities available on Unix systems
+(not available on Windows). To debug a function with Nvim-R you have to do the
+following:
+
+   1. Source the R script where the function is with the `source()` function
+      of the `base` package.
+
+   2. In the R Console, run either `debug(funcname)` or `debugonce(funcname)`
+      where `funcname` is the name of the function (not quoted). Nvim-R will
+      send this command to R Console if you press <LocalLeader>db in Normal
+      mode with the cursor over the function name.
+
+   3. Call the function.
+
+See `:Rh browser` for available commands in debugging mode.
+
+For example, if you have a file named `my_function.R` with the following
+contents:
+>r
+   add.one <- function(x){
+       y <- x + 1
+       print(y)
+       return(invisible(NULL))
+   }
+<
+You could debug the `add.one()` function from another script such as:
+>r
+   source("path/to/my_function.R")
+   debug(add.one)
+   add.one(7)
+<
+If you do not want to start debugging the function from its first line,
+instead of calling `debug(funcname)` before calling the function, you should
+add the line `browser()` to the function at the line where the debugging
+session should start. Example:
+>r
+   add.one <- function(x){
+       y <- x + 1
+       browser()
+       print(y)
+       return(invisible(NULL))
+   }
+<
+If you want a conditional breakpoint, you should call the `browser()` command
+only if a condition is satisfied. Example:
+>r
+   add.one <- function(x){
+       y <- x + 1
+       if(x > 9)
+           browser()
+       print(y)
+       return(invisible(NULL))
+   }
+<
+One limitation is that Nvim-R also does not help you setting breakpoints.
+You have to set them manually as explained above.
+
+Another limitation of Nvim-R is that it might be unable to jump to the line in
+the source code that is being evaluated if either you have sent the function
+directly to the R Console or the function has been sent by the `knitr`
+package, without calling the function `source()`. In either case, Nvim-R will
+try to find the pattern `funcname <- function(` in the buffer being edited. If
+the pattern is found, the cursor will jump to its position.
+
+The highlighting group used to highlight the line being debugged is the
+QuickFixLine (see |hl-QuickFixLine|). Its foreground and background colors are
+defined by your colorscheme, but you can change them in your |vimrc| (see
+|cterm-colors| and |gui-colors|). Example:
+>vim
+   hi QuickFixLine ctermfg=231 ctermbg=23 guifg=white guibg=#005f5f
+<
+
+------------------------------------------------------------------------------
+4.7. Syntax highlight of .Rout files
+
+You can set both foreground and background colors of R output in your `vimrc`.
+The example below is for either a GUI version of Vim or a terminal interface
+of Neovim with 'termguicolors' (see |true-color|):
+>r
+   if has('gui_running') || &termguicolors
+     let rout_color_input    = 'guifg=#9e9e9e'
+     let rout_color_normal   = 'guifg=#ff5f00'
+     let rout_color_number   = 'guifg=#ffaf00'
+     let rout_color_integer  = 'guifg=#feaf00'
+     let rout_color_float    = 'guifg=#fdaf00'
+     let rout_color_complex  = 'guifg=#fcaf00'
+     let rout_color_negnum   = 'guifg=#d7afff'
+     let rout_color_negfloat = 'guifg=#d6afff'
+     let rout_color_date     = 'guifg=#00d7af'
+     let rout_color_true     = 'guifg=#5dd685'
+     let rout_color_false    = 'guifg=#ff5d5e'
+     let rout_color_inf      = 'guifg=#10aed7'
+     let rout_color_constant = 'guifg=#5fafcf'
+     let rout_color_string   = 'guifg=#5fd7af'
+     let rout_color_error    = 'guifg=#ffffff guibg=#c40000'
+     let rout_color_warn     = 'guifg=#d00000'
+     let rout_color_index    = 'guifg=#d0d080'
+   endif
+<
+If you prefer that R output is highlighted using your current `colorscheme`,
+put in your `vimrc`:
+>vim
+   let rout_follow_colorscheme = 1
+<
