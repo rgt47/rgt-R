@@ -347,14 +347,14 @@ augroup RMarkdownMappings
 
 
     " Perform actions on the word under cursor
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>d :call Raction("dim")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>h :call Raction("head")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>s :call Raction("str")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>p :call Raction("print")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>n :call Raction("names")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f :call Raction("length")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")<CR>
-    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>b :call Raction("dt")<CR>
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>d :call Raction("dim")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>h :call Raction("head")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>s :call Raction("str")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>p :call Raction("print")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>n :call Raction("names")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>f :call Raction("length")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>g :call Raction("glimpse")
+    autocmd FileType r,rmd,qmd nnoremap <buffer> <localleader>b :call Raction("dt")
 
 " Normal mode mapping for <localleader>e
 nnoremap <silent> <localleader>o  :call AddPipeAndNewLine()<CR>
